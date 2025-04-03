@@ -1,2 +1,0 @@
-/*FICHIER VIDE*/
-int a;
