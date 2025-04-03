@@ -1,18 +1,24 @@
 CC = gcc
-OPTIONS = -Wall -ansi -pedantic
-EXECUTABLE = main
-# Ne pas modifier ci-dessous
-SOURCE = $(wildcard *.c)
-OBJETS = $(SOURCE:.c=.o)
-all: $(EXECUTABLE)
+CFLAGS = -Wall -ansi -pedantic -Iinclude
+SRC_DIRS = src/memory src/types src/primitives src/utils src/tests
+BUILD_DIRS = $(patsubst src/%,build/%,$(SRC_DIRS))
+SRC_FILES = $(wildcard src/*/*.c src/*.c)
+OBJ_FILES = $(patsubst src/%.c,build/%.o,$(SRC_FILES))
 
-$(EXECUTABLE): $(OBJETS)
-	$(CC) $(OPTIONS) $(OBJETS) -o $(EXECUTABLE)
+.PHONY: all clean dirs
 
-%.o: %.c
-	$(CC) $(OPTIONS) -MMD -c $<
+all: dirs bin/valisp
+
+dirs:
+	mkdir -p bin $(BUILD_DIRS)
+
+bin/valisp: $(OBJ_FILES)
+	$(CC) $(CFLAGS) $^ -o $@
+
+build/%.o: src/%.c
+	$(CC) $(CFLAGS) -MMD -c $< -o $@
 
 clean:
-	rm -vf *.o *.d
+	rm -rf build bin
 
--include *.d
+-include $(OBJ_FILES:.o=.d)

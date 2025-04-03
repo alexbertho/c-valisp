@@ -1,0 +1,2 @@
+/*FICHIER VIDE*/
+int a;
