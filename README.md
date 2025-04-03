@@ -59,16 +59,6 @@ Pour nettoyer les fichiers générés:
 make clean
 ```
 
-## Exécution des tests
-
-Le projet inclut plusieurs tests pour les différentes fonctionnalités. Pour exécuter les tests:
-
-```bash
-make test
-```
-
-Vous pouvez également exécuter des tests spécifiques en modifiant le fichier `main.c` pour n'appeler que certaines fonctions de test.
-
 ## Système de mémoire
 
 Le projet utilise un allocateur de mémoire personnalisé avec les caractéristiques suivantes:
