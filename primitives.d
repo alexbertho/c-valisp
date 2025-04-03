@@ -1,1 +1,0 @@
-primitives.o: primitives.c
