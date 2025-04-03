@@ -1,2 +1,7 @@
 *.d
 *.o
+main
+bin/
+build/
+
+*.pdf
