@@ -61,18 +61,18 @@ void test_chaines();
 void test_symboles();
 
 
-/*
+
 #define TEST_TYPES_LISTE
 void test_cons();
 void test_listes();
 void test_affichage_liste_cons();
-*/
+
 
 /* Tous les tests précédents sur les types en une fonction*/
-/*
+
 #define TEST_TYPES
 void test_types();
-*/
+
 
 
 
