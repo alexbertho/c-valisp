@@ -87,3 +87,29 @@ void test_types();
 #define TEST_PRIMITIVES_ADD
 void test_add();
 
+#define TEST_PRIMITIVES_SUB
+void test_sub();
+
+#define TEST_PRIMITIVES_PRODUIT
+void test_produit();
+
+#define TEST_PRIMITIVES_DIV
+void test_div();
+
+#define TEST_PRIMITIVES_MOD
+void test_mod();
+
+#define TEST_PRIMITIVES_COMP
+void test_comparaisons();
+
+#define TEST_PRIMITIVES_TYPEOF
+void test_type_of();
+
+#define TEST_PRIMITIVES_LISTE
+void test_car_cdr_cons();
+
+#define TEST_PRIMITIVES_PRINT
+void test_print();
+
+#define TEST_PRIMITIVES
+void test_primitives();

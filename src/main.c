@@ -24,8 +24,17 @@ int main() {
     test_cons();
 
     test_affichage_liste_cons(); 
-    test_add(); 
 
+    /* Tests des primitives */
+    test_add();
+    test_sub();
+    test_produit();
+    test_div();
+    test_mod();
+    test_comparaisons();
+    test_type_of();
+    test_car_cdr_cons();
+    test_print();
 
     /* Pour tester */
 

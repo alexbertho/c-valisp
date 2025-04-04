@@ -2,6 +2,7 @@
 #include "erreur.h"
 #include "primitives.h"
 #include <stddef.h>
+#include <stdio.h>
 
 
 void test_nb_parametres(sexpr liste, char* fonction, int taille) {
@@ -17,7 +18,7 @@ void test_nb_parametres(sexpr liste, char* fonction, int taille) {
         erreur(ARITE, "test_nb_parametres", "Erreur d'Arité", liste);
     }
 }
-
+/* (car nil) => nil) */
 sexpr car_valisp(sexpr liste, sexpr env) {
     sexpr a;
     test_nb_parametres(liste, "car", 1);
@@ -44,10 +45,6 @@ sexpr cons_valisp(sexpr liste, sexpr env) {
     a = car(liste);
     b = car(cdr(liste));
     
-    if (b == NULL) erreur(TYPAGE, "cons", "nécessite une liste non vide", b);
-    
-    if (!cons_p(b)) erreur(TYPAGE, "cons", "nécessite une liste", b);
-    
     return cons(a, b);
 }
 
@@ -66,6 +63,11 @@ sexpr add_valisp(sexpr liste, sexpr env) {
     return new_integer(get_integer(a) + get_integer(b));
 }
 
+/*
+(- 10 8) => 2
+(- 10)   => -10
+
+*/
 sexpr sub_valisp(sexpr liste, sexpr env) {
     sexpr a;
     sexpr b;
@@ -96,6 +98,8 @@ sexpr produit_valisp(sexpr liste, sexpr env) {
     return new_integer(get_integer(a) * get_integer(b));
 }
 
+
+/* (/ 5 0) */
 sexpr div_valisp(sexpr liste, sexpr env) {
     sexpr a;
     sexpr b;
@@ -126,6 +130,14 @@ sexpr mod_valisp(sexpr liste, sexpr env) {
     return new_integer(get_integer(a) % get_integer(b));
 }
 
+/*
+
+False => nil (NULL)
+new_symbol("t") 
+
+(defun > (a b)
+    (if (< a b) b a))
+*/
 sexpr less_than_valisp(sexpr liste, sexpr env) {
     sexpr a;
     sexpr b;
@@ -156,6 +168,11 @@ sexpr equal_valisp(sexpr liste, sexpr env) {
     return new_integer(get_integer(a) == get_integer(b));
 }
 
+
+/**
+ * (print "x+y=" 12 "+" (+ 2 3) ) ")
+ * 
+ */
 sexpr print_valisp(sexpr liste, sexpr env) {
     sexpr a;
     
@@ -171,6 +188,11 @@ sexpr print_valisp(sexpr liste, sexpr env) {
     return NULL;
 }
 
+/*
+
+(type-of nil) => symbol
+
+*/
 sexpr type_of_valisp(sexpr liste, sexpr env) {
     sexpr a;
     
@@ -181,14 +203,14 @@ sexpr type_of_valisp(sexpr liste, sexpr env) {
     if (a == NULL) erreur(TYPAGE, "type-of", "nécessite une valeur", a);
     
     if (integer_p(a)) {
-        return new_string("entier");
+        return new_symbol("entier");
     } else if (string_p(a)) {
-        return new_string("chaine");
+        return new_symbol("chaine");
     } else if (symbol_p(a)) {
-        return new_string("symbole");
+        return new_symbol("symbole");
     } else if (cons_p(a)) {
-        return new_string("liste");
+        return new_symbol("liste");
     } else {
-        return new_string("inconnu");
+        return new_symbol("inconnu");
     }
 }
