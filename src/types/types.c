@@ -113,7 +113,7 @@ sexpr cons(sexpr e1, sexpr e2) {
 }
 
 bool cons_p(sexpr e) {
-    return (e!=NULL && e->type == couple);
+    return (e != NULL && e->type == couple);
 }
 
 bool list_p(sexpr e) {
@@ -159,6 +159,31 @@ void afficher_liste(sexpr e) {
 /* PARTIE PRIMITIVES*/
 /* =================*/
 
+sexpr new_primitive(sexpr (*p)(sexpr, sexpr)) {
+    sexpr new_prim = valisp_malloc(sizeof(struct valisp_object));
+    new_prim->type = prim;
+    new_prim->data.PRIMITIVE = p;
+    return new_prim;
+}
+
+sexpr new_speciale(sexpr (*p)(sexpr, sexpr)) {
+    sexpr new_spec = valisp_malloc(sizeof(struct valisp_object));
+    new_spec->type = spec;
+    new_spec->data.PRIMITIVE = p;
+    return new_spec;
+}
+
+bool prim_p (sexpr val) {
+    return (bool) (val != NULL && val->type == prim);
+}
+
+bool spec_p (sexpr val) {
+    return (bool) (val != NULL && val->type == spec);
+}
+
+sexpr run_prim(sexpr p, sexpr liste, sexpr env) {
+    return p->data.PRIMITIVE(liste, env);
+}
 
 
 
@@ -181,6 +206,10 @@ void afficher(sexpr val) {
             printf("(");
             afficher_liste(val);
             printf(")");
+            break;
+        case prim:
+            break;
+        case spec:
             break;
         default:
             break;

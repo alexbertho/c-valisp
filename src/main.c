@@ -11,9 +11,9 @@ int main() {
 
 
     /* Pour tester les fonctions de la première séance */
-    /*test_memoire_vide();
+    test_memoire_vide();
     test_allocateurs_fonctions_de_base();
-    test_allocateur_malloc();*/
+    test_allocateur_malloc();
 
 
     /* Pour tester les fonctions de la seconde séance */
@@ -23,8 +23,8 @@ int main() {
     test_listes();
     test_cons();
 
-    /* test_affichage_liste_cons(); */
-    /* test_add(); */
+    test_affichage_liste_cons(); 
+    test_add(); 
 
 
     /* Pour tester */
