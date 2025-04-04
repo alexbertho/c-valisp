@@ -83,7 +83,7 @@ void test_types();
 /*                                      */
 /****************************************/
 
-/*
+
 #define TEST_PRIMITIVES_ADD
 void test_add();
-*/
+
