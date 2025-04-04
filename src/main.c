@@ -20,8 +20,9 @@ int main() {
     test_entiers(); 
     test_chaines();
     test_symboles(); 
-    /* test_listes(); */
-    /* test_cons(); */
+    test_listes();
+    test_cons();
+
     /* test_affichage_liste_cons(); */
     /* test_add(); */
 

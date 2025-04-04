@@ -97,12 +97,69 @@ bool symbol_p(sexpr val) {
 }
 
 bool symbol_match_p(sexpr val, const char *chaine) {
-    return (bool) strcmp(get_symbol(val), chaine) == 0;
+    return (bool) (strcmp(get_symbol(val), chaine) == 0);
 }
 
 /* =============*/
 /* PARTIE LISTES*/
 /* =============*/
+
+sexpr cons(sexpr e1, sexpr e2) {
+    sexpr new_cons = valisp_malloc(sizeof(struct valisp_object));
+    new_cons->type = couple;
+    new_cons->data.CONS.car = e1;
+    new_cons->data.CONS.cdr = e2;
+    return new_cons;
+}
+
+bool cons_p(sexpr e) {
+    return (e!=NULL && e->type == couple);
+}
+
+bool list_p(sexpr e) {
+    if  (e == NULL) return 1;
+    if (!cons_p(e)) return 0;
+    if (e->data.CONS.cdr == NULL) return 1;
+    if (cons_p(e->data.CONS.cdr)) return 1;
+    return 0;
+}
+
+sexpr car(sexpr e) {
+    return (e->data.CONS.car);
+}
+
+sexpr cdr(sexpr e) {
+    return (e->data.CONS.cdr);
+}
+
+void set_car(sexpr e, sexpr nouvelle) {
+    e->data.CONS.car = nouvelle;
+}
+
+void set_cdr(sexpr e, sexpr nouvelle) {
+    e->data.CONS.cdr = nouvelle;
+}
+
+void afficher_liste(sexpr e) {
+    sexpr x = car(e), y = cdr(e);
+    afficher(x);
+
+    if (y==NULL) {
+        return;
+    } else if (cons_p(y) || list_p(y)) {
+        printf(" ");
+        afficher_liste(y);
+    } else {
+        printf(" . ");
+        afficher(y);
+    }
+}
+
+/* =================*/
+/* PARTIE PRIMITIVES*/
+/* =================*/
+
+
 
 
 void afficher(sexpr val) {
@@ -121,6 +178,9 @@ void afficher(sexpr val) {
             printf("%s", get_symbol(val));
             break;
         case couple:
+            printf("(");
+            afficher_liste(val);
+            printf(")");
             break;
         default:
             break;
