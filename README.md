@@ -7,10 +7,6 @@ Ce projet est une implémentation d'un interpréteur Lisp simplifié appelé Val
 ```
 valisp/
 ├── include/                 # Fichiers d'en-tête (.h)
-│   ├── memory/              # Gestion de la mémoire
-│   ├── types/               # Types de données
-│   ├── primitives/          # Primitives du langage
-│   └── utils/               # Utilitaires
 ├── src/                     # Code source de l'application
 │   ├── memory/              # Implémentation de la gestion mémoire
 │   ├── types/               # Implémentation des types
