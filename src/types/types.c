@@ -185,8 +185,6 @@ sexpr run_prim(sexpr p, sexpr liste, sexpr env) {
     return p->data.PRIMITIVE(liste, env);
 }
 
-
-
 void afficher(sexpr val) {
     if (val == NULL) {
         printf("nil");
