@@ -183,7 +183,6 @@ sexpr print_valisp(sexpr liste, sexpr env) {
     if (a == NULL) erreur(TYPAGE, "print", "nécessite une valeur", a);
     
     afficher(a);
-    printf("\n");
     
     return NULL;
 }
