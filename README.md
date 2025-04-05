@@ -22,8 +22,8 @@ valisp/
 │   └── test_runner.c        # Point d'entrée des tests
 ├── build/                   # Fichiers de compilation générés
 ├── bin/                     # Exécutables générés
-│   ├── valisp              # Exécutable principal
-│   └── test_valisp         # Exécutable de test
+│   ├── valisp               # Exécutable principal
+│   └── test_valisp          # Exécutable de test
 ├── Makefile                 # Configuration de compilation
 └── README.md                # Ce fichier
 ```
