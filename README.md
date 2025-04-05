@@ -8,30 +8,26 @@ Ce projet est une implémentation d'un interpréteur Lisp simplifié appelé Val
 valisp/
 ├── include/                 # Fichiers d'en-tête (.h)
 │   ├── memory/              # Gestion de la mémoire
-│   │   ├── allocateur.h     # Allocateur de mémoire personnalisé
-│   │   └── memoire.h        # Interface de haut niveau pour la mémoire
 │   ├── types/               # Types de données
-│   │   └── types.h          # Définition des types du langage (sexpr, etc.)
 │   ├── primitives/          # Primitives du langage
-│   │   └── primitives.h     # Fonctions primitives du langage
 │   └── utils/               # Utilitaires
-│       ├── couleurs.h       # Gestion des couleurs pour l'affichage
-│       ├── erreur.h         # Gestion des erreurs
-│       └── tests.h          # Utilitaires pour les tests
-├── src/                     # Code source
+├── src/                     # Code source de l'application
 │   ├── memory/              # Implémentation de la gestion mémoire
 │   ├── types/               # Implémentation des types
 │   ├── primitives/          # Implémentation des primitives
 │   ├── utils/               # Implémentation des utilitaires
-│   ├── tests/               # Tests des fonctionnalités
 │   └── main.c               # Point d'entrée du programme
+├── test/                    # Code source des tests
+│   ├── memory/              # Tests pour les composants mémoire
+│   ├── types/               # Tests pour les types
+│   ├── primitives/          # Tests pour les primitives
+│   ├── utils/               # Tests pour les utilitaires
+│   ├── test_config.h        # Configuration des tests
+│   └── test_runner.c        # Point d'entrée des tests
 ├── build/                   # Fichiers de compilation générés
-│   ├── memory/
-│   ├── types/
-│   ├── primitives/
-│   ├── utils/
-│   └── tests/
 ├── bin/                     # Exécutables générés
+│   ├── valisp              # Exécutable principal
+│   └── test_valisp         # Exécutable de test
 ├── Makefile                 # Configuration de compilation
 └── README.md                # Ce fichier
 ```
@@ -53,11 +49,29 @@ make
 
 Cela générera l'exécutable `bin/valisp`.
 
+Pour exécuter les tests:
+
+```bash
+make test
+```
+
+Cela générera et exécutera l'exécutable de test `bin/test_valisp`.
+
 Pour nettoyer les fichiers générés:
 
 ```bash
 make clean
 ```
+
+## Tests
+
+Le projet inclut une suite de tests pour vérifier le bon fonctionnement des différents composants:
+
+- **Tests de l'allocateur**: Vérifie le fonctionnement de l'allocateur de mémoire
+- **Tests des types**: Vérifie le bon fonctionnement des types (entiers, chaînes, symboles, listes)
+- **Tests des primitives**: Vérifie le fonctionnement des primitives du langage
+
+Vous pouvez configurer quels tests exécuter en modifiant le fichier `test/test_config.h`.
 
 ## Système de mémoire
 
