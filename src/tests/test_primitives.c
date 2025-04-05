@@ -76,6 +76,8 @@ void test_sub() {
     b = RUN_TEST(integer_p(c)) && b;
     b = RUN_TEST(get_integer(c) == val1 - val2) && b;
     
+    ok_test(b);
+
     /* Test 2: 3 - 10 (négatif) */
     val1 = 3;
     val2 = 10;
@@ -83,6 +85,10 @@ void test_sub() {
     b_expr = new_integer(val2);
     liste = cons(a, cons(b_expr, NULL));
     c = sub_valisp(liste, env);
+
+    printf("%d - %d = ", val1, val2);
+    afficher(c);
+    printf("  ");
     
     b = RUN_TEST(integer_p(c)) && b;
     b = RUN_TEST(get_integer(c) == val1 - val2) && b;
@@ -121,6 +127,8 @@ void test_produit() {
     
     b = RUN_TEST(integer_p(c)) && b;
     b = RUN_TEST(get_integer(c) == val1 * val2) && b;
+
+    ok_test(b);
     
     /* Test 2: 0 * 5 */
     val1 = 0;
@@ -129,6 +137,10 @@ void test_produit() {
     b_expr = new_integer(val2);
     liste = cons(a, cons(b_expr, NULL));
     c = produit_valisp(liste, env);
+
+    printf("%d * %d = ", val1, val2);
+    afficher(c);
+    printf("  ");
     
     b = RUN_TEST(integer_p(c)) && b;
     b = RUN_TEST(get_integer(c) == val1 * val2) && b;
@@ -167,6 +179,8 @@ void test_div() {
     
     b = RUN_TEST(integer_p(c)) && b;
     b = RUN_TEST(get_integer(c) == val1 / val2) && b;
+
+    ok_test(b);
     
     /* Test 2: 10 / 3 (division entière) */
     val1 = 10;
@@ -175,6 +189,10 @@ void test_div() {
     b_expr = new_integer(val2);
     liste = cons(a, cons(b_expr, NULL));
     c = div_valisp(liste, env);
+
+    printf("%d / %d = ", val1, val2);
+    afficher(c);
+    printf("  ");
     
     b = RUN_TEST(integer_p(c)) && b;
     b = RUN_TEST(get_integer(c) == val1 / val2) && b;
@@ -216,6 +234,8 @@ void test_mod() {
     
     b = RUN_TEST(integer_p(c)) && b;
     b = RUN_TEST(get_integer(c) == val1 % val2) && b;
+
+    ok_test(b);
     
     /* Test 2: 7 % 7 */
     val1 = 7;
@@ -227,6 +247,10 @@ void test_mod() {
     
     b = RUN_TEST(integer_p(c)) && b;
     b = RUN_TEST(get_integer(c) == val1 % val2) && b;
+
+    printf("%d %% %d = ", val1, val2);
+    afficher(c);
+    printf("  ");
     
     ok_test(b);
 }
@@ -263,6 +287,8 @@ void test_comparaisons() {
     
     b = RUN_TEST(integer_p(c)) && b;
     b = RUN_TEST(get_integer(c) == (val1 < val2 ? 1 : 0)) && b;
+
+    ok_test(b);
     
     /* Test 2: 10 < 5 */
     val1 = 10;
@@ -274,6 +300,10 @@ void test_comparaisons() {
     
     b = RUN_TEST(integer_p(c)) && b;
     b = RUN_TEST(get_integer(c) == (val1 < val2 ? 1 : 0)) && b;
+
+    printf("%d < %d = ", val1, val2);
+    afficher(c);
+    printf("  ");
     
     ok_test(b);
     
@@ -295,6 +325,8 @@ void test_comparaisons() {
     
     b = RUN_TEST(integer_p(c)) && b;
     b = RUN_TEST(get_integer(c) == (val1 == val2 ? 1 : 0)) && b;
+
+    ok_test(b);
     
     /* Test 2: 8 = 9 */
     val1 = 8;
@@ -303,11 +335,16 @@ void test_comparaisons() {
     b_expr = new_integer(val2);
     liste = cons(a, cons(b_expr, NULL));
     c = equal_valisp(liste, env);
+
+    printf("%d = %d : ", val1, val2);
+    afficher(c);
+    printf("  ");
     
     b = RUN_TEST(integer_p(c)) && b;
     b = RUN_TEST(get_integer(c) == (val1 == val2 ? 1 : 0)) && b;
-    
+
     ok_test(b);
+    
 }
 #endif
 
@@ -334,31 +371,49 @@ void test_type_of() {
     afficher(res);
     printf("  ");
     
-    b = RUN_TEST(string_p(res)) && b;
+    b = RUN_TEST(symbol_p(res)) && b;
     b = RUN_TEST(strcmp(get_string(res), "entier") == 0) && b;
+
+    ok_test(b);
     
     /* Test avec une chaîne */
     val = new_string("Bonjour");
     liste = cons(val, NULL);
     res = type_of_valisp(liste, env);
+
+    printf("Type de 'Bonjour' : ");
+    afficher(res);
+    printf("  ");
     
-    b = RUN_TEST(string_p(res)) && b;
+    b = RUN_TEST(symbol_p(res)) && b;
     b = RUN_TEST(strcmp(get_string(res), "chaine") == 0) && b;
+
+    ok_test(b);
     
     /* Test avec un symbole */
     val = new_symbol("x");
     liste = cons(val, NULL);
     res = type_of_valisp(liste, env);
+
+    printf("Type de 'x' : ");
+    afficher(res);
+    printf("  ");
     
-    b = RUN_TEST(string_p(res)) && b;
+    b = RUN_TEST(symbol_p(res)) && b;
     b = RUN_TEST(strcmp(get_string(res), "symbole") == 0) && b;
+
+    ok_test(b);
     
     /* Test avec une liste */
     val = cons(new_integer(1), cons(new_integer(2), NULL));
     liste = cons(val, NULL);
     res = type_of_valisp(liste, env);
+
+    printf("Type de '(1 2)' : ");
+    afficher(res);
+    printf("  ");
     
-    b = RUN_TEST(string_p(res)) && b;
+    b = RUN_TEST(symbol_p(res)) && b;
     b = RUN_TEST(strcmp(get_string(res), "liste") == 0) && b;
     
     ok_test(b);
@@ -452,6 +507,7 @@ void test_print() {
     val = new_integer(42);
     liste = cons(val, NULL);
     res = print_valisp(liste, env);
+
     
     b = RUN_TEST(res == NULL) && b;
     

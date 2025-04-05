@@ -36,13 +36,13 @@ const char* get_nom_erreur(enum erreurs type) {
 }
 
 void afficher_erreur() {
-    printf(couleur_rouge);
+    printf("%s", couleur_rouge);
     printf("Erreur d’exécution [%s] : %s\n", get_nom_erreur(TYPE_ERREUR), MESSAGE_ERREUR);
     printf("Fonction fautive : « %s »\n", FONCTION_ERREUR);
     printf("Valeur fautive : «\"");
     afficher(SEXPR_ERREUR);
     printf("\"»\n");
-    printf(couleur_defaut);
+    printf("%s", couleur_defaut);
 }
 
 void erreur(enum erreurs type, char* fonction, char * explication, sexpr s) {
