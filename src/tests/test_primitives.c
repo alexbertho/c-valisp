@@ -6,32 +6,30 @@
 #include "primitives.h"
 #include "mes_tests.h"
 
-/* Fonctions auxiliaires pour afficher les tests */
-
 /* Pour les opérations binaires (add, sub, mul, div, mod) */
 void afficher_test_binaire(char* nom_fonction, int val1, char* operateur, int val2, sexpr resultat) {
-    printf("%-15s %2d %s %3d = ", nom_fonction, val1, operateur, val2);
+    printf("%s %d %s %d = ", nom_fonction, val1, operateur, val2);
     afficher(resultat);
     printf("  ");
 }
 
 /* Pour les comparaisons */
 void afficher_test_comparaison(char* nom_fonction, int val1, char* operateur, int val2, sexpr resultat) {
-    printf("%-15s %2d %s %3d : ", nom_fonction, val1, operateur, val2);
+    printf("%s %d %s %d : ", nom_fonction, val1, operateur, val2);
     afficher(resultat);
     printf("  ");
 }
 
 /* Pour les tests de type */
 void afficher_test_type(char* nom_fonction, char* description, sexpr resultat) {
-    printf("%-15s %-20s : ", nom_fonction, description);
+    printf("%s %s : ", nom_fonction, description);
     afficher(resultat);
     printf("  ");
 }
 
 /* Pour les tests sur les listes */
 void afficher_test_liste(char* nom_fonction, char* description, sexpr resultat) {
-    printf("%-15s %-20s : ", nom_fonction, description);
+    printf("%s %s : ", nom_fonction, description);
     afficher(resultat);
     printf("  ");
 }
@@ -502,9 +500,10 @@ void test_print() {
     
     printf("print_valisp    Affichage d'un entier : ");
     res = print_valisp(liste, env);
-    printf("\n");
     
     b = RUN_TEST(res == NULL) && b;
+
+    ok_test(b);
     
     /* Test avec une chaîne */
     val = new_string("Bonjour monde");
@@ -512,9 +511,10 @@ void test_print() {
     
     printf("print_valisp    Affichage d'une chaîne : ");
     res = print_valisp(liste, env);
-    printf("\n");
-    
+
     b = RUN_TEST(res == NULL) && b;
+
+    ok_test(b);
     
     /* Test avec un symbole */
     val = new_symbol("symbole");
@@ -522,17 +522,17 @@ void test_print() {
     
     printf("print_valisp    Affichage d'un symbole : ");
     res = print_valisp(liste, env);
-    printf("\n");
     
     b = RUN_TEST(res == NULL) && b;
     
+    ok_test(b);
+
     /* Test avec une liste */
     val = cons(new_integer(1), cons(new_integer(2), cons(new_integer(3), NULL)));
     liste = cons(val, NULL);
     
     printf("print_valisp    Affichage d'une liste : ");
     res = print_valisp(liste, env);
-    printf("\n");
     
     b = RUN_TEST(res == NULL) && b;
     
