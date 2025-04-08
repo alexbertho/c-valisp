@@ -23,9 +23,9 @@ sexpr car_valisp(sexpr liste, sexpr env) {
     sexpr a;
     test_nb_parametres(liste, "car", 1);
     a = car(liste);
+    if (a == NULL) return NULL;
     if (!cons_p(a)) erreur(TYPAGE, "car", "nécessite une liste", a);
     return car(a);
-    
 }
 
 sexpr cdr_valisp(sexpr liste, sexpr env) {
@@ -98,8 +98,6 @@ sexpr produit_valisp(sexpr liste, sexpr env) {
     return new_integer(get_integer(a) * get_integer(b));
 }
 
-
-/* (/ 5 0) */
 sexpr div_valisp(sexpr liste, sexpr env) {
     sexpr a;
     sexpr b;
@@ -111,6 +109,8 @@ sexpr div_valisp(sexpr liste, sexpr env) {
     
     if (!integer_p(a)) erreur(TYPAGE, "/", "nécessite un entier", a);
     if (!integer_p(b)) erreur(TYPAGE, "/", "nécessite un entier", b);
+    if (get_integer(b) == 0) erreur(DIVISION_PAR_ZERO, "/", "division par zéro", b);
+    
     
     return new_integer(get_integer(a) / get_integer(b));
 }
