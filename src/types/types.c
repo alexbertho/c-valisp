@@ -1,7 +1,8 @@
-#include "types.h"
-#include <stdio.h>
-#include "memoire.h"
 #include <string.h>
+#include <stdio.h>
+#include "types.h"
+#include "memoire.h"
+#include "erreur.h"
 
 typedef enum {
     entier, 
@@ -45,6 +46,9 @@ bool integer_p(sexpr val) {
 }
 
 int get_integer(sexpr val) {
+    if (!integer_p(val)) {
+        ERREUR_FATALE("get_integer: l'argument n'est pas un entier");
+    }
     return val->data.INTEGER;
 }
 
@@ -80,14 +84,6 @@ sexpr new_symbol(char *c) {
     return new_symbol;   
 }
 
-char *get_symbol(sexpr val) {
-    return val->data.STRING;
-}
-
-char *get_string(sexpr val) {
-    return val->data.STRING;
-}
-
 bool string_p(sexpr val) {
     return (bool) ((val != NULL) && (val->type == chaine));
 }
@@ -96,8 +92,25 @@ bool symbol_p(sexpr val) {
     return (bool) ((val != NULL) && (val->type == symbole));
 }
 
+char *get_symbol(sexpr val) {
+    if (!symbol_p(val)) {
+        ERREUR_FATALE("get_symbol: l'argument n'est pas un symbole");
+    }
+    return val->data.STRING;
+}
+
+char *get_string(sexpr val) {
+    if (!string_p(val)) {
+        ERREUR_FATALE("get_string: l'argument n'est pas une chaine");
+    }
+    return val->data.STRING;
+}
+
 bool symbol_match_p(sexpr val, const char *chaine) {
-    return (bool) (strcmp(get_symbol(val), chaine) == 0);
+    if (!symbol_p(val)) {
+        ERREUR_FATALE("symbol_match_p: l'argument n'est pas un symbole");
+    }
+    return (bool) (strcmp(val->data.STRING, chaine) == 0);
 }
 
 /* =============*/
@@ -117,18 +130,24 @@ bool cons_p(sexpr e) {
 }
 
 bool list_p(sexpr e) {
-    if  (e == NULL) return 1;
-    if (!cons_p(e)) return 0;
-    if (e->data.CONS.cdr == NULL) return 1;
-    if (cons_p(e->data.CONS.cdr)) return 1;
-    return 0;
+    if (e == NULL) return (bool) 1;
+    if (!cons_p(e)) return (bool) 0;
+    if (e->data.CONS.cdr == NULL) return (bool) 1;
+    if (cons_p(e->data.CONS.cdr)) return (bool) 1;
+    return (bool) 0;
 }
 
 sexpr car(sexpr e) {
+    if (!cons_p(e)) {
+        ERREUR_FATALE("car: l'argument n'est pas une liste");
+    }
     return (e->data.CONS.car);
-}
+} 
 
 sexpr cdr(sexpr e) {
+    if (!cons_p(e)) {
+        ERREUR_FATALE("cdr: l'argument n'est pas une liste");
+    }
     return (e->data.CONS.cdr);
 }
 
@@ -190,6 +209,7 @@ void afficher(sexpr val) {
         printf("nil");
         return;
     }
+
     switch (val->type) {
         case entier:
             printf("%d", get_integer(val));

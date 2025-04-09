@@ -9,6 +9,7 @@
  #define TEST_CONFIG_H
  
  /* Activation de tous les tests individuels pour la compilation */
+
  #define TEST_ALLOCATEUR_EX1
  #define TEST_ALLOCATEUR_EX2
  #define TEST_ALLOCATEUR_EX3
