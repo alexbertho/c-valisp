@@ -43,28 +43,74 @@ void afficher_test_liste(char* nom_fonction, char* description, sexpr resultat) 
 #ifdef TEST_PRIMITIVES_ADD
 void test_add() {
     int b = 1;
-    sexpr a;
-    sexpr b_expr;
-    sexpr c;
-    sexpr liste;
-    sexpr env;
-    int val_a = 10;
-    int val_b = 5;
+    sexpr liste, env, resultat;
     
     afficher_titre("Test Additions");
-    
     initialiser_memoire_dynamique();
-    a = new_integer(val_a);
-    b_expr = new_integer(val_b);
-    liste = cons(a, cons(b_expr, NULL));
     env = NULL;
-    c = add_valisp(liste, env);
     
-    afficher_test_binaire("add_valisp", val_a, "+", val_b, c);
+    /* Test avec 2 paramètres : 10 + 5 */
+    liste = cons(new_integer(10), cons(new_integer(5), NULL));
+    resultat = add_valisp(liste, env);
     
-    b = RUN_TEST(integer_p(c)) && b;
-    b = RUN_TEST(get_integer(c) == val_a + val_b) && b;
+    printf("add_valisp 10 + 5 = ");
+    afficher(resultat);
+    printf("  ");
     
+    b = RUN_TEST(integer_p(resultat)) && b;
+    b = RUN_TEST(get_integer(resultat) == 15) && b;
+    ok_test(b);
+    
+    /* Test avec 3 paramètres : 10 + 5 + 7 */
+    liste = cons(new_integer(10), cons(new_integer(5), cons(new_integer(7), NULL)));
+    resultat = add_valisp(liste, env);
+    
+    printf("add_valisp 10 + 5 + 7 = ");
+    afficher(resultat);
+    printf("  ");
+    
+    b = RUN_TEST(integer_p(resultat)) && b;
+    b = RUN_TEST(get_integer(resultat) == 22) && b;
+    ok_test(b);
+    
+    /* Test avec 4 paramètres : 1 + 2 + 3 + 4 */
+    liste = cons(new_integer(1), 
+                cons(new_integer(2), 
+                    cons(new_integer(3), 
+                        cons(new_integer(4), NULL))));
+    resultat = add_valisp(liste, env);
+    
+    printf("add_valisp 1 + 2 + 3 + 4 = ");
+    afficher(resultat);
+    printf("  ");
+    
+    b = RUN_TEST(integer_p(resultat)) && b;
+    b = RUN_TEST(get_integer(resultat) == 10) && b;
+    ok_test(b);
+
+    /* Test avec 0 paramètre : devrait renvoyer 0 ou une erreur */
+    liste = NULL;
+    resultat = add_valisp(liste, env);
+    
+    printf("add_valisp (sans paramètre) = ");
+    afficher(resultat);
+    printf("  ");
+    
+    b = RUN_TEST(integer_p(resultat)) && b;
+    b = RUN_TEST(get_integer(resultat) == 0) && b;
+    ok_test(b);
+    
+    
+    /* Test avec 1 paramètre : devrait renvoyer le paramètre lui-même */
+    liste = cons(new_integer(42), NULL);
+    resultat = add_valisp(liste, env);
+    
+    printf("add_valisp 42 = ");
+    afficher(resultat);
+    printf("  ");
+    
+    b = RUN_TEST(integer_p(resultat)) && b;
+    b = RUN_TEST(get_integer(resultat) == 42) && b;
     ok_test(b);
     printf("\n");
 }
@@ -73,96 +119,153 @@ void test_add() {
 #ifdef TEST_PRIMITIVES_SUB
 void test_sub() {
     int b = 1;
-    sexpr a;
-    sexpr b_expr;
-    sexpr c;
-    sexpr liste;
-    sexpr env;
-    int val1, val2;
+    sexpr liste, env, resultat;
     
     afficher_titre("Test Soustractions");
-    
     initialiser_memoire_dynamique();
     env = NULL;
     
-    /* Test 1: 15 - 7 */
-    val1 = 15;
-    val2 = 7;
-    a = new_integer(val1);
-    b_expr = new_integer(val2);
-    liste = cons(a, cons(b_expr, NULL));
-    c = sub_valisp(liste, env);
+    /* Test avec 2 paramètres : 15 - 7 */
+    liste = cons(new_integer(15), cons(new_integer(7), NULL));
+    resultat = sub_valisp(liste, env);
     
-    afficher_test_binaire("sub_valisp", val1, "-", val2, c);
+    printf("sub_valisp 15 - 7 = ");
+    afficher(resultat);
+    printf("  ");
     
-    b = RUN_TEST(integer_p(c)) && b;
-    b = RUN_TEST(get_integer(c) == val1 - val2) && b;
-    
+    b = RUN_TEST(integer_p(resultat)) && b;
+    b = RUN_TEST(get_integer(resultat) == 8) && b;
     ok_test(b);
-    printf("\n");
-
-    /* Test 2: 3 - 10 (négatif) */
-    val1 = 3;
-    val2 = 10;
-    a = new_integer(val1);
-    b_expr = new_integer(val2);
-    liste = cons(a, cons(b_expr, NULL));
-    c = sub_valisp(liste, env);
-
-    afficher_test_binaire("sub_valisp", val1, "-", val2, c);
     
-    b = RUN_TEST(integer_p(c)) && b;
-    b = RUN_TEST(get_integer(c) == val1 - val2) && b;
+    /* Test avec 3 paramètres : 20 - 5 - 3 */
+    liste = cons(new_integer(20), cons(new_integer(5), cons(new_integer(3), NULL)));
+    resultat = sub_valisp(liste, env);
     
+    printf("sub_valisp 20 - 5 - 3 = ");
+    afficher(resultat);
+    printf("  ");
+    
+    b = RUN_TEST(integer_p(resultat)) && b;
+    b = RUN_TEST(get_integer(resultat) == 12) && b;
+    ok_test(b);
+    
+    /* Test avec 4 paramètres : 100 - 20 - 30 - 10 */
+    liste = cons(new_integer(100), 
+                cons(new_integer(20), 
+                    cons(new_integer(30), 
+                        cons(new_integer(10), NULL))));
+    resultat = sub_valisp(liste, env);
+    
+    printf("sub_valisp 100 - 20 - 30 - 10 = ");
+    afficher(resultat);
+    printf("  ");
+    
+    b = RUN_TEST(integer_p(resultat)) && b;
+    b = RUN_TEST(get_integer(resultat) == 40) && b;
+    ok_test(b);
+
+    /* Test avec 0 paramètre : devrait renvoyer 0 ou une erreur */
+    liste = NULL;
+    resultat = sub_valisp(liste, env);
+    
+    printf("sub_valisp (sans paramètre) = ");
+    afficher(resultat);
+    printf("  ");
+    
+    b = RUN_TEST(integer_p(resultat)) && b;
+    b = RUN_TEST(get_integer(resultat) == 0) && b;
+    ok_test(b);
+
+    
+    /* Test avec 1 paramètre : devrait inverser le signe du paramètre */
+    liste = cons(new_integer(42), NULL);
+    resultat = sub_valisp(liste, env);
+    
+    printf("sub_valisp 42 = ");
+    afficher(resultat);
+    printf("  ");
+    
+    b = RUN_TEST(integer_p(resultat)) && b;
+    b = RUN_TEST(get_integer(resultat) == -42) && b;
     ok_test(b);
     printf("\n");
 }
+
 #endif
 
 #ifdef TEST_PRIMITIVES_PRODUIT
 void test_produit() {
     int b = 1;
-    sexpr a;
-    sexpr b_expr;
-    sexpr c;
-    sexpr liste;
-    sexpr env;
-    int val1, val2;
+    sexpr liste, env, resultat;
     
     afficher_titre("Test Multiplications");
-    
     initialiser_memoire_dynamique();
     env = NULL;
     
-    /* Test 1: 6 * 7 */
-    val1 = 6;
-    val2 = 7;
-    a = new_integer(val1);
-    b_expr = new_integer(val2);
-    liste = cons(a, cons(b_expr, NULL));
-    c = produit_valisp(liste, env);
+    /* Test avec 2 paramètres : 6 * 7 */
+    liste = cons(new_integer(6), cons(new_integer(7), NULL));
+    resultat = produit_valisp(liste, env);
     
-    afficher_test_binaire("produit_valisp", val1, "*", val2, c);
+    printf("produit_valisp 6 * 7 = ");
+    afficher(resultat);
+    printf("  ");
     
-    b = RUN_TEST(integer_p(c)) && b;
-    b = RUN_TEST(get_integer(c) == val1 * val2) && b;
+    b = RUN_TEST(integer_p(resultat)) && b;
+    b = RUN_TEST(get_integer(resultat) == 42) && b;
+    ok_test(b);
+    
+    /* Test avec 3 paramètres : 2 * 3 * 4 */
+    liste = cons(new_integer(2), 
+                cons(new_integer(3), 
+                    cons(new_integer(4), NULL)));
+    resultat = produit_valisp(liste, env);
+    
+    printf("produit_valisp 2 * 3 * 4 = ");
+    afficher(resultat);
+    printf("  ");
+    
+    b = RUN_TEST(integer_p(resultat)) && b;
+    b = RUN_TEST(get_integer(resultat) == 24) && b;
+    ok_test(b);
+    
+    /* Test avec 4 paramètres : 1 * 2 * 3 * 5 */
+    liste = cons(new_integer(1), 
+                cons(new_integer(2), 
+                    cons(new_integer(3), 
+                        cons(new_integer(5), NULL))));
+    resultat = produit_valisp(liste, env);
+    
+    printf("produit_valisp 1 * 2 * 3 * 5 = ");
+    afficher(resultat);
+    printf("  ");
+    
+    b = RUN_TEST(integer_p(resultat)) && b;
+    b = RUN_TEST(get_integer(resultat) == 30) && b;
+    ok_test(b);
 
+    /* Test avec 0 paramètre : devrait renvoyer 1 (élément neutre) */
+    liste = NULL;
+    resultat = produit_valisp(liste, env);
+    
+    printf("produit_valisp (sans paramètre) = ");
+    afficher(resultat);
+    printf("  ");
+    
+    b = RUN_TEST(integer_p(resultat)) && b;
+    b = RUN_TEST(get_integer(resultat) == 1) && b;
     ok_test(b);
     printf("\n");
     
-    /* Test 2: 0 * 5 */
-    val1 = 0;
-    val2 = 5;
-    a = new_integer(val1);
-    b_expr = new_integer(val2);
-    liste = cons(a, cons(b_expr, NULL));
-    c = produit_valisp(liste, env);
-
-    afficher_test_binaire("produit_valisp", val1, "*", val2, c);
+    /* Test avec 1 paramètre : devrait renvoyer le paramètre lui-même */
+    liste = cons(new_integer(42), NULL);
+    resultat = produit_valisp(liste, env);
     
-    b = RUN_TEST(integer_p(c)) && b;
-    b = RUN_TEST(get_integer(c) == val1 * val2) && b;
+    printf("produit_valisp 42 = ");
+    afficher(resultat);
+    printf("  ");
     
+    b = RUN_TEST(integer_p(resultat)) && b;
+    b = RUN_TEST(get_integer(resultat) == 42) && b;
     ok_test(b);
     printf("\n");
 }
@@ -171,52 +274,68 @@ void test_produit() {
 #ifdef TEST_PRIMITIVES_DIV
 void test_div() {
     int b = 1;
-    sexpr a;
-    sexpr b_expr;
-    sexpr c;
-    sexpr liste;
-    sexpr env;
-    int val1, val2;
+    sexpr liste, env, resultat;
     
     afficher_titre("Test Divisions");
-    
     initialiser_memoire_dynamique();
     env = NULL;
     
-    /* Test 1: 21 / 7 */
-    val1 = 21;
-    val2 = 7;
-    a = new_integer(val1);
-    b_expr = new_integer(val2);
-    liste = cons(a, cons(b_expr, NULL));
-    c = div_valisp(liste, env);
+    /* Test avec 2 paramètres : 21 / 7 */
+    liste = cons(new_integer(21), cons(new_integer(7), NULL));
+    resultat = div_valisp(liste, env);
     
-    afficher_test_binaire("div_valisp", val1, "/", val2, c);
+    printf("div_valisp 21 / 7 = ");
+    afficher(resultat);
+    printf("  ");
     
-    b = RUN_TEST(integer_p(c)) && b;
-    b = RUN_TEST(get_integer(c) == val1 / val2) && b;
-
+    b = RUN_TEST(integer_p(resultat)) && b;
+    b = RUN_TEST(get_integer(resultat) == 3) && b;
     ok_test(b);
     printf("\n");
     
-    /* Test 2: 10 / 3 (division entière) */
-    val1 = 10;
-    val2 = 3;
-    a = new_integer(val1);
-    b_expr = new_integer(val2);
-    liste = cons(a, cons(b_expr, NULL));
-    c = div_valisp(liste, env);
-
-    afficher_test_binaire("div_valisp", val1, "/", val2, c);
+    /* Test avec 3 paramètres : 100 / 5 / 2 */
+    liste = cons(new_integer(100), 
+                cons(new_integer(5), 
+                    cons(new_integer(2), NULL)));
+    resultat = div_valisp(liste, env);
     
-    b = RUN_TEST(integer_p(c)) && b;
-    b = RUN_TEST(get_integer(c) == val1 / val2) && b;
+    printf("div_valisp 100 / 5 / 2 = ");
+    afficher(resultat);
+    printf("  ");
     
+    b = RUN_TEST(integer_p(resultat)) && b;
+    b = RUN_TEST(get_integer(resultat) == 10) && b;
     ok_test(b);
     printf("\n");
     
-    /* Note: On ne teste pas la division par zéro 
-     * car cela provoquerait une erreur fatale */
+    /* Test avec 4 paramètres : 120 / 2 / 3 / 5 */
+    liste = cons(new_integer(120), 
+                cons(new_integer(2), 
+                    cons(new_integer(3), 
+                        cons(new_integer(5), NULL))));
+    resultat = div_valisp(liste, env);
+    
+    printf("div_valisp 120 / 2 / 3 / 5 = ");
+    afficher(resultat);
+    printf("  ");
+    
+    b = RUN_TEST(integer_p(resultat)) && b;
+    b = RUN_TEST(get_integer(resultat) == 4) && b;
+    ok_test(b);
+    printf("\n");
+    
+    /* Test avec 1 paramètre : devrait retourner 1/paramètre */
+    liste = cons(new_integer(4), NULL);
+    resultat = div_valisp(liste, env);
+    
+    printf("div_valisp 4 = ");
+    afficher(resultat);
+    printf("  ");
+    
+    b = RUN_TEST(integer_p(resultat)) && b;
+    b = RUN_TEST(get_integer(resultat) == 4) && b; 
+    ok_test(b);
+    printf("\n");
 }
 #endif
 
@@ -249,7 +368,6 @@ void test_mod() {
     b = RUN_TEST(get_integer(c) == val1 % val2) && b;
 
     ok_test(b);
-    printf("\n");
     
     /* Test 2: 7 % 7 */
     val1 = 7;
@@ -299,7 +417,6 @@ void test_comparaisons() {
     b = RUN_TEST(get_integer(c) == (val1 < val2 ? 1 : 0)) && b;
 
     ok_test(b);
-    printf("\n");
     
     /* Test 2: 10 < 5 */
     val1 = 10;
@@ -315,7 +432,6 @@ void test_comparaisons() {
     b = RUN_TEST(get_integer(c) == (val1 < val2 ? 1 : 0)) && b;
 
     ok_test(b);
-    printf("\n");
     
     /* Test equal */
     
@@ -333,7 +449,6 @@ void test_comparaisons() {
     b = RUN_TEST(get_integer(c) == (val1 == val2 ? 1 : 0)) && b;
 
     ok_test(b);
-    printf("\n");
     
     /* Test 2: 8 = 9 */
     val1 = 8;
@@ -374,10 +489,9 @@ void test_type_of() {
     afficher_test_type("type_of_valisp", "Type de 42", res);
     
     b = RUN_TEST(symbol_p(res)) && b;
-    b = RUN_TEST(strcmp(get_string(res), "entier") == 0) && b;
+    b = RUN_TEST(strcmp(get_symbol(res), "entier") == 0) && b;
 
     ok_test(b);
-    printf("\n");
     
     /* Test avec une chaîne */
     val = new_string("Bonjour");
@@ -387,7 +501,7 @@ void test_type_of() {
     afficher_test_type("type_of_valisp", "Type de 'Bonjour'", res);
     
     b = RUN_TEST(symbol_p(res)) && b;
-    b = RUN_TEST(strcmp(get_string(res), "chaine") == 0) && b;
+    b = RUN_TEST(strcmp(get_symbol(res), "chaine") == 0) && b;
 
     ok_test(b);
     printf("\n");
@@ -400,7 +514,7 @@ void test_type_of() {
     afficher_test_type("type_of_valisp", "Type de 'x'", res);
     
     b = RUN_TEST(symbol_p(res)) && b;
-    b = RUN_TEST(strcmp(get_string(res), "symbole") == 0) && b;
+    b = RUN_TEST(strcmp(get_symbol(res), "symbole") == 0) && b;
 
     ok_test(b);
     printf("\n");
@@ -413,7 +527,7 @@ void test_type_of() {
     afficher_test_type("type_of_valisp", "Type de '(1 2)'", res);
     
     b = RUN_TEST(symbol_p(res)) && b;
-    b = RUN_TEST(strcmp(get_string(res), "liste") == 0) && b;
+    b = RUN_TEST(strcmp(get_symbol(res), "liste") == 0) && b;
     
     ok_test(b);
     printf("\n");
@@ -451,7 +565,6 @@ void test_car_cdr_cons() {
     b = RUN_TEST(get_integer(res) == 1) && b;
     
     ok_test(b);
-    printf("\n");
     
     /* Test cdr */
     res = cdr_valisp(cons(liste, NULL), env);
@@ -463,7 +576,6 @@ void test_car_cdr_cons() {
     b = RUN_TEST(get_integer(car(res)) == 2) && b;
     
     ok_test(b);
-    printf("\n");
     
     /* Test cons */
     val1 = new_integer(4);

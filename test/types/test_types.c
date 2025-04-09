@@ -103,7 +103,7 @@ void test_un_symbole(char *c) {
     b = RUN_TEST(strcmp(get_symbol(e), c) == 0)                 && b;
     b = RUN_TEST(symbol_match_p(e, c))                          && b;
     b = RUN_TEST(appartient_a_memoire_dynamique(e))             && b;
-    b = RUN_TEST(appartient_a_memoire_dynamique(get_string(e))) && b;
+    b = RUN_TEST(appartient_a_memoire_dynamique(get_symbol(e))) && b;
     ok_test(b);
 }
 
