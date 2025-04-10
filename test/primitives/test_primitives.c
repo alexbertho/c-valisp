@@ -254,7 +254,6 @@ void test_produit() {
     b = RUN_TEST(integer_p(resultat)) && b;
     b = RUN_TEST(get_integer(resultat) == 1) && b;
     ok_test(b);
-    printf("\n");
     
     /* Test avec 1 paramètre : devrait renvoyer le paramètre lui-même */
     liste = cons(new_integer(42), NULL);
@@ -291,7 +290,6 @@ void test_div() {
     b = RUN_TEST(integer_p(resultat)) && b;
     b = RUN_TEST(get_integer(resultat) == 3) && b;
     ok_test(b);
-    printf("\n");
     
     /* Test avec 3 paramètres : 100 / 5 / 2 */
     liste = cons(new_integer(100), 
@@ -306,7 +304,6 @@ void test_div() {
     b = RUN_TEST(integer_p(resultat)) && b;
     b = RUN_TEST(get_integer(resultat) == 10) && b;
     ok_test(b);
-    printf("\n");
     
     /* Test avec 4 paramètres : 120 / 2 / 3 / 5 */
     liste = cons(new_integer(120), 
@@ -322,7 +319,6 @@ void test_div() {
     b = RUN_TEST(integer_p(resultat)) && b;
     b = RUN_TEST(get_integer(resultat) == 4) && b;
     ok_test(b);
-    printf("\n");
     
     /* Test avec 1 paramètre : devrait retourner 1/paramètre */
     liste = cons(new_integer(4), NULL);
@@ -333,7 +329,7 @@ void test_div() {
     printf("  ");
     
     b = RUN_TEST(integer_p(resultat)) && b;
-    b = RUN_TEST(get_integer(resultat) == 4) && b; 
+    b = RUN_TEST(get_integer(resultat) == 1/4) && b; 
     ok_test(b);
     printf("\n");
 }
@@ -504,7 +500,6 @@ void test_type_of() {
     b = RUN_TEST(strcmp(get_symbol(res), "chaine") == 0) && b;
 
     ok_test(b);
-    printf("\n");
     
     /* Test avec un symbole */
     val = new_symbol("x");
@@ -517,7 +512,6 @@ void test_type_of() {
     b = RUN_TEST(strcmp(get_symbol(res), "symbole") == 0) && b;
 
     ok_test(b);
-    printf("\n");
     
     /* Test avec une liste */
     val = cons(new_integer(1), cons(new_integer(2), NULL));
