@@ -92,6 +92,9 @@ Pour contribuer au projet:
 2. Ajoutez des tests pour les nouvelles fonctionnalités
 3. Mettez à jour la documentation si nécessaire
 
+## Documentation Lisp
+Une documentation de Lisp est disponible sur ce site: [Lisp Documentation](https://lisp-docs.github.io/cl-language-reference/)
+
 ## Auteur
 
 Alexandre Bertho
