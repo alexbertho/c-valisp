@@ -75,9 +75,17 @@ sexpr add_valisp(sexpr liste, sexpr env) {
 sexpr sub_valisp(sexpr liste, sexpr env) {
     sexpr a;
     sexpr courant = liste;
-    int diff=0;
+    int diff;
 
     if (liste == NULL) return new_integer(0);
+
+
+    /*A ameliorer !*/
+    a = car(courant);
+    if (!integer_p(a)) erreur(TYPAGE, "-", "nécessite un entier", a);
+    diff = get_integer(a);
+    courant = cdr(courant);
+    if (courant == NULL) return new_integer(-diff);
 
     while (courant != NULL){
         a = car(courant);
@@ -108,10 +116,18 @@ sexpr produit_valisp(sexpr liste, sexpr env) {
     return new_integer(produit);
 }
 
+/*A ameliore et div_valisp 4 renvoie 0 au lieux de 1/4 ne gere pas les floatants*/
 sexpr div_valisp(sexpr liste, sexpr env) {
     sexpr a;
     sexpr courant = liste;
-    int quotient=0;
+    int quotient;
+
+    /*A ameliorer !*/
+    a = car(courant);
+    if (!integer_p(a)) erreur(TYPAGE, "-", "nécessite un entier", a);
+    quotient = get_integer(a);
+    courant = cdr(courant);
+    if (courant == NULL) return new_integer(1/quotient);
 
     while (courant != NULL){
         a = car(courant);
