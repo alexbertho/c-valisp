@@ -1,8 +1,9 @@
-#include "allocateur.h"
 #include <stdint.h>
 #include <stdio.h>
 #include <stddef.h>
 #include <stdlib.h>
+#include "allocateur.h"
+#include "erreur.h"
 
 
 bloc MEMOIRE_DYNAMIQUE[TAILLE_MEMOIRE_DYNAMIQUE];
@@ -75,6 +76,14 @@ int rechercher_bloc_libre(size_t size) {
     return -1;
 }
 
+int pointeur_vers_indice(void *ptr) {
+    int i = (bloc *) ptr - MEMOIRE_DYNAMIQUE;
+    if (i < 1 || i > TAILLE_MEMOIRE_DYNAMIQUE) {
+        ERREUR_FATALE("L'INDICE EST HORS DE LA MEMOIRE");
+    }
+    return i;
+}
+
 void *allocateur_malloc(size_t size) {
     int taille_dispo, suivant_original, nouveau_bloc;
     int nb_cases_necessaires = (size + TAILLE_BLOC_OCTETS - 1) / TAILLE_BLOC_OCTETS;
@@ -116,6 +125,9 @@ int ramasse_miette_lire_marque(void * ptr) {
 
 void ramasse_miette_poser_marque(void * ptr) {
     bloc *bloc_ptr = (bloc *)ptr;
+    if(ramasse_miette_lire_marque(ptr)) {
+        ERREUR_FATALE("LE BLOC EST DEJA MARQUE");
+    }
     *bloc_ptr |= (1 << 31);
 }
 
