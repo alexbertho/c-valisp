@@ -137,6 +137,11 @@ int bloc_libre(int i) {
 }
 
 int free_fusion(int i) {
+    /*
+    j : le premier bloc libre avant i
+    k : le premier bloc libre après i
+    i : le bloc à libérer
+    */
     int j, k;
 
     /*Trouver le premier bloc libre en remontant la chaîne*/

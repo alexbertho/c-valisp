@@ -13,11 +13,7 @@ int usage_bloc(int i);
 int rm_bloc(int i);
 int taille_bloc(int i);
 
-typedef uint32_t bloc;
-
 extern bloc MEMOIRE_DYNAMIQUE[];
-
-
 
 void allouer_memoire_pour_test(int tailles[], int libres[], int n) {
     /* tailles est de taille n
@@ -62,7 +58,6 @@ int comparer_memoire_pour_test(int tailles[], int libres[], int n) {
     res = (MEMOIRE_DYNAMIQUE[s] == cons_bloc(0, k, 1, s)) && res;
     return res;
 }
-
 
 #ifdef TEST_ALLOCATEUR_EX1
 /****************************/
