@@ -1,8 +1,9 @@
+#include <stddef.h>
+#include <stdio.h>
+
 #include "types.h"
 #include "erreur.h"
 #include "primitives.h"
-#include <stddef.h>
-#include <stdio.h>
 
 
 void test_nb_parametres(sexpr liste, char* fonction, int taille) {
@@ -232,4 +233,40 @@ sexpr type_of_valisp(sexpr liste, sexpr env) {
     } else { /*Symbole inconnu*/
         return new_symbol("nil");
     }
+}
+
+sexpr defvar_valisp(sexpr liste, sexpr env) {
+    sexpr nom;
+    sexpr exp;
+    sexpr res;
+
+    test_nb_parametres(liste,"defvar",2);
+    nom = car(liste);
+    exp = car(cdr(liste));
+
+    if (!symbol_p(nom)) {
+        erreur(TYPAGE,"defvar",
+            "Le 1er paramètre doit être un symbole",
+            nom);
+    }
+
+    res = eval(exp, env); 
+    definir_variable_globale(nom,res); 
+    return res;
+}
+
+sexpr setq_valisp(sexpr liste, sexpr env) {
+    sexpr nom;
+    sexpr exp;
+    sexpr res;
+    test_nb_parametres(liste,"setq",2);
+    nom = car(liste);
+    exp = car(cdr(liste));
+    if (!symbol_p(nom)) {
+        erreur(TYPAGE,"defvar",
+            "Le 1er paramètre doit être un symbole",
+            nom);
+    }
+    res = eval(exp, env); 
+    definir_variable_globale(nom,res); 
 }
