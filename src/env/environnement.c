@@ -4,15 +4,16 @@
 
 #include "types.h"
 #include "allocateur.h"
+#include "couleurs.h"
 
 sexpr ENV = NULL;
 
 
-sexpr environnement_global(void) {
+sexpr environnement_global() {
     return ENV;
 }
 
-void initialiser_memoire(void) {
+void initialiser_memoire() {
     sexpr t;
 
     initialiser_memoire_dynamique();
@@ -32,6 +33,31 @@ void ajouter_a_la_fin(sexpr env, sexpr variable, sexpr valeur) {
         ENV = cons(cons(variable, valeur), NULL);
     } else {
         set_cdr(dernier, cons(cons(variable, valeur), NULL));
+    }
+}
+
+int longeur_env(sexpr env) {
+    int n;
+    for (n = 0; env != NULL; env = cdr(env), n++);
+    return n;
+}
+
+void valisp_stat_memoire() {
+    afficher_stat_memoire();
+    printf(" → %d variables\n", longeur_env(environnement_global()));
+}
+
+void afficher_env(sexpr env) {
+    sexpr a;
+    for (; env != NULL; env = cdr(env)) {
+        a = car(env);  /* a est de la forme (nom . valeur) */
+        
+        printf(couleur_bleu);
+        afficher(car(a));    
+        printf(" ");
+        printf(couleur_blanc);
+        afficher(cdr(a));    
+        printf("\n");
     }
 }
 

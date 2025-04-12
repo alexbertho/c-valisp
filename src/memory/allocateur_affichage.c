@@ -1,6 +1,7 @@
-#include "allocateur.h"
 #include <stdio.h>
 #include <stddef.h>
+
+#include "allocateur.h"
 
 /* Accès aux définitions et variables externes de l'allocateur */
 extern bloc MEMOIRE_DYNAMIQUE[];
@@ -47,7 +48,7 @@ void afficher_stat_memoire() {
             b += 1;
         }
     }
-    printf("%d/%d (%.2f %%) %d/%d blocs alloués\n", a, t, (100.*a)/t, b,n);
+    printf("%d/%d (%.2f %%) %d/%d blocs alloués", a, t, (100.*a)/t, b,n);
 }
 
 void afficher_stat_memoire_bref() {

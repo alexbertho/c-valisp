@@ -1,4 +1,5 @@
 #include <stdio.h>
+
 #include "allocateur.h"
 #include "erreur.h"
 #include "string.h"
@@ -16,7 +17,7 @@ int main() {
 
     /* Tests de l'allocateur de mémoire */
     #ifdef TEST_ALLOCATEUR
-    /*test_allocateur();*/
+    test_allocateur();
     #else
     #ifdef TEST_ALLOCATEUR_EX1
     test_memoire_vide();
@@ -31,7 +32,7 @@ int main() {
 
     /* Tests des types */
     #ifdef TEST_TYPES
-    /*test_types();*/
+    test_types();
     #else
     #ifdef TEST_TYPES_ENTIER
     test_entiers(); 
