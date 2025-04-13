@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <setjmp.h>
 #include "types.h"
 #include "couleurs.h"
 #include "erreur.h"
@@ -20,6 +21,11 @@ enum erreurs TYPE_ERREUR;
 char * MESSAGE_ERREUR;
 char * FONCTION_ERREUR;
 sexpr SEXPR_ERREUR;
+jmp_buf buf;
+
+jmp_buf *jump_buffer() {
+    return &buf;
+}
 
 const char* get_nom_erreur(enum erreurs type) {
     switch(type) {
@@ -50,8 +56,11 @@ void erreur(enum erreurs type, char* fonction, char * explication, sexpr s) {
     MESSAGE_ERREUR = explication;
     FONCTION_ERREUR = fonction;
     SEXPR_ERREUR = s;
-    afficher_erreur();
-    exit(1);
+    /* On enlève l'affichage de l'erreur qui sera fait dans le REPL */
+    /* afficher_erreur(); */
+    
+    /* On utilise longjmp avec buf (sans &) */
+    longjmp(buf, 1);
 }
 
 void erreur_fatale(char  *fichier, int ligne, char* causes) {

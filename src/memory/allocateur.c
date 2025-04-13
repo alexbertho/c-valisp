@@ -78,11 +78,14 @@ int rechercher_bloc_libre(size_t size) {
 }
 
 int pointeur_vers_indice(void *ptr) {
-    int i = (bloc *) ptr - MEMOIRE_DYNAMIQUE;
+    int i = ((bloc *)ptr) - MEMOIRE_DYNAMIQUE;
+    
+    /* Vérification si le pointeur est dans les limites valides */
     if (i <= 0 || i >= TAILLE_MEMOIRE_DYNAMIQUE) {
-        ERREUR_FATALE("pointeur_vers_indice: invalid pointer");
+        ERREUR_FATALE("pointeur_vers_indice: pointeur invalide");
     }
-    return i;
+
+    return i-1;
 }
 
 void *allocateur_malloc(size_t size) {
@@ -120,12 +123,15 @@ void *allocateur_malloc(size_t size) {
 }
 
 int ramasse_miette_lire_marque(void * ptr) {
-    bloc *bloc_ptr = (bloc *)ptr;
+    int i = pointeur_vers_indice(ptr);
+    bloc *bloc_ptr = &MEMOIRE_DYNAMIQUE[i];
     return (*bloc_ptr >> 31) & 1;
 }
 
 void ramasse_miette_poser_marque(void * ptr) {
-    bloc *bloc_ptr = (bloc *)ptr;
+    int i = pointeur_vers_indice(ptr);
+    bloc *bloc_ptr = &MEMOIRE_DYNAMIQUE[i];
+
     if(ramasse_miette_lire_marque(ptr)) {
         ERREUR_FATALE("LE BLOC EST DEJA MARQUE");
     }
@@ -170,11 +176,11 @@ void ramasse_miette_liberer() {
     }
 }
 
-void allocateur_free_bloc (int i) {
+void allocateur_free_bloc(int i) {
     free_fusion(i);
 }
 
-void allocateur_free (void *ptr) {
+void allocateur_free(void *ptr) {
     int bloc_indice = (bloc *) ptr - MEMOIRE_DYNAMIQUE;
     int i;
     /*Maintenant on doit trouvé le bloc courrespondant c'est ne pas forcemment i-1*/

@@ -4,7 +4,7 @@
 #include "types.h"
 #include "erreur.h"
 #include "primitives.h"
-
+#include "environnement.h"
 
 void test_nb_parametres(sexpr liste, char* fonction, int taille) {
     int compteur = 0;
@@ -213,6 +213,22 @@ sexpr print_valisp(sexpr liste, sexpr env) {
     return NULL;
 }
 
+sexpr println_valisp(sexpr liste, sexpr env) {
+    sexpr a;
+    
+    test_nb_parametres(liste, "println", 1);
+    
+    a = car(liste);
+    
+    if (a == NULL) erreur(TYPAGE, "println", "nécessite une valeur", a);
+    
+    afficher(a);
+    printf("\n");
+    
+    return NULL;
+}
+
+
 sexpr type_of_valisp(sexpr liste, sexpr env) {
     sexpr a;
     
@@ -234,7 +250,7 @@ sexpr type_of_valisp(sexpr liste, sexpr env) {
         return new_symbol("nil");
     }
 }
-
+/*
 sexpr defvar_valisp(sexpr liste, sexpr env) {
     sexpr nom;
     sexpr exp;
@@ -251,7 +267,7 @@ sexpr defvar_valisp(sexpr liste, sexpr env) {
     }
 
     res = eval(exp, env); 
-    definir_variable_globale(nom,res); 
+    definir_variable_globale(nom, res); 
     return res;
 }
 
@@ -259,14 +275,19 @@ sexpr setq_valisp(sexpr liste, sexpr env) {
     sexpr nom;
     sexpr exp;
     sexpr res;
+
     test_nb_parametres(liste,"setq",2);
     nom = car(liste);
     exp = car(cdr(liste));
+
     if (!symbol_p(nom)) {
         erreur(TYPAGE,"defvar",
             "Le 1er paramètre doit être un symbole",
             nom);
     }
+    
     res = eval(exp, env); 
-    definir_variable_globale(nom,res); 
+    modifier_variable(env, nom, res);
+    return res;
 }
+*/

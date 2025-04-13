@@ -11,5 +11,6 @@ void definir_variable_globale(sexpr variable, sexpr valeur);
 void charger_une_primitive(char* nom, sexpr (*prim)(sexpr, sexpr));
 void charger_une_speciale(char* nom, sexpr (*prim)(sexpr, sexpr));
 void afficher_env(sexpr env);
+void valisp_stat_memoire();
 
-#endif
+#endif  
