@@ -52,10 +52,10 @@ void afficher_env(sexpr env) {
     for (; env != NULL; env = cdr(env)) {
         a = car(env);  /* a est de la forme (nom . valeur) */
         
-        printf(couleur_bleu);
+        printf("%s", couleur_bleu);
         afficher(car(a));    
         printf(" ");
-        printf(couleur_blanc);
+        printf("%s", couleur_blanc);
         afficher(cdr(a));    
         printf("\n");
     }
@@ -102,13 +102,13 @@ void definir_variable_globale(sexpr variable, sexpr valeur) {
 }
 
 void charger_une_primitive(char* nom, sexpr (*prim)(sexpr, sexpr)) {
-    sexpr variable = new_symbol("nom");
+    sexpr variable = new_symbol(nom);
     sexpr primitive = new_primitive(prim);
     definir_variable_globale(variable, primitive);
 }
 
 void charger_une_speciale(char* nom, sexpr (*prim)(sexpr, sexpr)) {
-    sexpr variable = new_symbol("nom");
+    sexpr variable = new_symbol(nom);
     sexpr speciale = new_speciale(prim);
     definir_variable_globale(variable, speciale);
 }
