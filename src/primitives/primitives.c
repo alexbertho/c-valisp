@@ -5,6 +5,7 @@
 #include "erreur.h"
 #include "primitives.h"
 #include "environnement.h"
+#include "interpreteur.h"
 
 void test_nb_parametres(sexpr liste, char* fonction, int taille) {
     int compteur = 0;
@@ -250,7 +251,7 @@ sexpr type_of_valisp(sexpr liste, sexpr env) {
         return new_symbol("nil");
     }
 }
-/*
+
 sexpr defvar_valisp(sexpr liste, sexpr env) {
     sexpr nom;
     sexpr exp;
@@ -266,7 +267,7 @@ sexpr defvar_valisp(sexpr liste, sexpr env) {
             nom);
     }
 
-    res = eval(exp, env); 
+    res = (sexpr) eval(exp, env); 
     definir_variable_globale(nom, res); 
     return res;
 }
@@ -286,8 +287,7 @@ sexpr setq_valisp(sexpr liste, sexpr env) {
             nom);
     }
     
-    res = eval(exp, env); 
+    res = (sexpr) eval(exp, env); 
     modifier_variable(env, nom, res);
     return res;
 }
-*/

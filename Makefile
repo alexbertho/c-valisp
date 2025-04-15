@@ -9,26 +9,31 @@ OBJ_FILES = $(patsubst src/%.c,build/%.o,$(SRC_FILES))
 TEST_OBJ_FILES = $(patsubst test/%.c,build/test/%.o,$(TEST_FILES))
 
 # Objets pour l'application principale (sans les objets de test)
-MAIN_OBJ_FILES = $(OBJ_FILES)
+MAIN_OBJ_FILES = $(OBJ_FILES) build/parseur.o build/interpreteur.o
 
 # Objets pour les tests (objets sources sans main + objets de test)
-APP_TEST_OBJ_FILES = $(filter-out build/main.o, $(OBJ_FILES)) $(TEST_OBJ_FILES)
+APP_TEST_OBJ_FILES = $(filter-out build/main.o, $(OBJ_FILES)) $(TEST_OBJ_FILES) build/parseur.o build/interpreteur.o
 
 # Binaire de test
 TEST_BIN = bin/test_valisp
 
-.PHONY: all clean dirs test
+.PHONY: all clean dirs test objext
 
-all: dirs bin/valisp
+all: dirs objext bin/valisp
 
 dirs:
 	mkdir -p bin $(BUILD_DIRS)
 
+# Copie les fichiers objets externes dans le dossier build
+objext: dirs
+	cp -f parseur.o build/ 2>/dev/null || true
+	cp -f interpreteur.o build/ 2>/dev/null || true
+
 bin/valisp: $(MAIN_OBJ_FILES)
-	$(CC) $(CFLAGS) $^ -o $@
+	$(CC) $(CFLAGS) $^ -o $@ -lreadline
 
 # Cible de test qui compile et exécute les tests
-test: dirs $(TEST_BIN)
+test: dirs objext $(TEST_BIN)
 	./$(TEST_BIN)
 
 # Compilation du binaire de test
@@ -37,6 +42,7 @@ $(TEST_BIN): $(APP_TEST_OBJ_FILES)
 
 # Règle pour compiler les fichiers source du projet
 build/%.o: src/%.c
+	@mkdir -p $(dir $@)
 	$(CC) $(CFLAGS) -MMD -c $< -o $@
 
 # Règle pour compiler les fichiers de test
