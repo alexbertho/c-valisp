@@ -119,6 +119,7 @@ void *allocateur_malloc(size_t size) {
         /* Sinon, utiliser tout le bloc */
         set_use(i);
     }
+    
     return &MEMOIRE_DYNAMIQUE[i + 1];
 }
 

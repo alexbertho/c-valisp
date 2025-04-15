@@ -8,6 +8,8 @@
 #include "mes_tests.h"
 #include "environnement.h"
 #include "memoire.h"
+#include "valisp.h"
+
 
 /*
 int main() {
