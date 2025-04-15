@@ -92,9 +92,7 @@ void supprime_retour_ligne_finale_buffer(char * buffer) {
 
 void repl_env() {
       afficher_env(environnement_global());
-      printf("\n\n");
 }
-
 
 
 int repl() {
@@ -139,16 +137,16 @@ int repl() {
           POSITION=0;
 
           if (res < 0) {
-              printf(couleur_rouge);
+              printf("%s", couleur_rouge);
               printf("Erreur de syntaxe [%d]\n\n", res);
-              printf(couleur_defaut);
+              printf("%s", couleur_defaut);
               continue;
           }
 
           if (res > 0) {
-              printf(couleur_rouge);
+              printf("%s", couleur_rouge);
               printf("Pas plus d’une sexpr par ligne\n\n");
-              printf(couleur_defaut);
+              printf("%s", couleur_defaut);
               continue;
           }
 
@@ -157,21 +155,21 @@ int repl() {
 
 
 	  /* Tout ce que valisp affichera sera en bleu*/
-          printf(couleur_bleu);
+          printf("%s", couleur_bleu);
           val = eval(val,environnement_global()); /* EVAL */
-          printf(couleur_defaut);
+          printf("%s", couleur_defaut);
 
 	  /* Et la valeur de retour sera en vert */
-          printf(couleur_vert);
+          printf("%s", couleur_vert);
           afficher(val);                         /* PRINT */
-          printf(couleur_defaut);
+          printf("%s", couleur_defaut);
 
 
       } else {
           /* Si on rencontre une « exception » */
-          printf(couleur_rouge);
+          printf("%s", couleur_rouge);
           afficher_erreur();
-          printf(couleur_defaut);
+          printf("%s", couleur_defaut);
       }
 
       printf("\n\n");
@@ -211,7 +209,7 @@ void afficher_banniere() {
 /*                                      */
 /****************************************/
 
-  printf(couleur_vert);
+  printf("%s", couleur_vert);
   printf("           %s__%s                    \n", couleur_jaune, couleur_vert);
   printf("           %s\\ \\%s   _             \n", couleur_jaune, couleur_vert);
   printf("__   ____ _ %s\\ \\%s (_)___ _ __    \n", couleur_jaune, couleur_vert);
@@ -220,7 +218,7 @@ void afficher_banniere() {
   printf("  \\_/ \\__,%s/_/  \\%s|_|___/ .__/  \n", couleur_jaune, couleur_vert);
   printf("                      |_|       \n");
   printf("                                 \n");
-  printf(couleur_defaut);
+  printf("%s", couleur_defaut);
 }
 
 int valisp_main(int argc, char *argv[]) {
