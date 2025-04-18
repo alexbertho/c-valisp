@@ -7,23 +7,25 @@ Ce projet est une implémentation d'un interpréteur Lisp simplifié appelé Val
 ```
 valisp/
 ├── include/                 # Fichiers d'en-tête (.h)
+├── lib/                     # Bibliothèques interne en lisp
 ├── src/                     # Code source de l'application
+│   ├── interpreter/         # Implémentation de l'interpréteur
 │   ├── memory/              # Implémentation de la gestion mémoire
+│   ├── parser/              # Implémentation de l'analyseur syntaxique
 │   ├── types/               # Implémentation des types
 │   ├── primitives/          # Implémentation des primitives
 │   ├── utils/               # Implémentation des utilitaires
+│   ├── valisp.c             # Fichier principal de l'application
 │   └── main.c               # Point d'entrée du programme
 ├── test/                    # Code source des tests
 │   ├── memory/              # Tests pour les composants mémoire
-│   ├── types/               # Tests pour les types
 │   ├── primitives/          # Tests pour les primitives
+│   ├── types/               # Tests pour les types
 │   ├── utils/               # Tests pour les utilitaires
-│   ├── test_config.h        # Configuration des tests
 │   └── test_runner.c        # Point d'entrée des tests
 ├── build/                   # Fichiers de compilation générés
 ├── bin/                     # Exécutables générés
-│   ├── valisp               # Exécutable principal
-│   └── test_valisp          # Exécutable de test
+│   └── valisp               # Exécutable principal
 ├── Makefile                 # Configuration de compilation
 └── README.md                # Ce fichier
 ```
