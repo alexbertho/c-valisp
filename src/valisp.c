@@ -44,6 +44,10 @@ void charger_primitives() {
 
   charger_une_speciale("defvar",  defvar_valisp);
   charger_une_speciale("setq",    setq_valisp);
+  charger_une_speciale("quote",   quote_valisp);
+  charger_une_speciale("lambda",  lambda_valisp);
+  charger_une_speciale("macro",   macro_valisp);
+  charger_une_speciale("if",      if_valisp);
 }
 
 
