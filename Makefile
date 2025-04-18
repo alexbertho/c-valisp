@@ -1,6 +1,6 @@
 CC = gcc
 CFLAGS = -Wall -ansi -pedantic -Iinclude
-SRC_DIRS = src/memory src/types src/primitives src/utils src/env src/parseur src/interpreter
+SRC_DIRS = src/memory src/types src/primitives src/utils src/env src/parseur src/interpreter src/parser
 TEST_DIRS = test/memory test/types test/primitives test/utils
 BUILD_DIRS = $(patsubst src/%,build/%,$(SRC_DIRS)) build/test
 SRC_FILES = $(wildcard src/*/*.c src/*.c)
@@ -9,11 +9,10 @@ OBJ_FILES = $(patsubst src/%.c,build/%.o,$(SRC_FILES))
 TEST_OBJ_FILES = $(patsubst test/%.c,build/test/%.o,$(TEST_FILES))
 
 # Objets pour l'application principale (sans les objets de test)
-MAIN_OBJ_FILES = $(OBJ_FILES) build/parseur.o
+MAIN_OBJ_FILES = $(OBJ_FILES) 
 
 # Objets pour les tests (objets sources sans main + objets de test)
-APP_TEST_OBJ_FILES = $(filter-out build/main.o, $(OBJ_FILES)) $(TEST_OBJ_FILES) build/parseur.o build/interpreteur.o
-
+APP_TEST_OBJ_FILES = $(filter-out build/main.o, $(OBJ_FILES)) $(TEST_OBJ_FILES)
 # Binaire de test
 TEST_BIN = bin/test_valisp
 
@@ -23,10 +22,6 @@ all: dirs objext bin/valisp
 
 dirs:
 	mkdir -p bin $(BUILD_DIRS)
-
-# Copie les fichiers objets externes dans le dossier build
-objext: dirs
-	cp -f parseur.o build/ 2>/dev/null || true
 
 bin/valisp: $(MAIN_OBJ_FILES)
 	$(CC) $(CFLAGS) $^ -o $@ -lreadline
