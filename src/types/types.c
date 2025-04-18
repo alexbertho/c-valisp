@@ -160,6 +160,12 @@ void set_cdr(sexpr e, sexpr nouvelle) {
     e->data.CONS.cdr = nouvelle;
 }
 
+int longueur_liste(sexpr e) {
+    int n;
+    for (n = 0; e != NULL; e = cdr(e), n++);
+    return n;
+}
+
 void afficher_liste(sexpr e) {
     sexpr x = car(e), y = cdr(e);
     afficher(x);
@@ -193,11 +199,11 @@ sexpr new_speciale(sexpr (*p)(sexpr, sexpr)) {
     return new_spec;
 }
 
-bool prim_p (sexpr val) {
+bool prim_p(sexpr val) {
     return (bool) (val != NULL && val->type == prim);
 }
 
-bool spec_p (sexpr val) {
+bool spec_p(sexpr val) {
     return (bool) (val != NULL && val->type == spec);
 }
 

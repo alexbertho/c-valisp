@@ -17,19 +17,17 @@
 #include "erreur.h"
 #include "couleurs.h"
 
-/*
-extern sexpr eval_valisp;
-extern sexpr apply_valisp;
-*/
+
 /********************************/
 /*                              */
 /*  Chargement des primitives   */
 /*                              */
 /********************************/
 
+
 void charger_primitives() {
-  charger_une_primitive("eval",     eval);
-  charger_une_primitive("apply",    apply);
+  charger_une_primitive("eval",     eval_valisp);
+  charger_une_primitive("apply",    apply_valisp);
   charger_une_primitive("car",      car_valisp);
   charger_une_primitive("cdr",      cdr_valisp);
   charger_une_primitive("cons",     cons_valisp);
@@ -46,7 +44,6 @@ void charger_primitives() {
 
   charger_une_speciale("defvar",  defvar_valisp);
   charger_une_speciale("setq",    setq_valisp);
-
 }
 
 
@@ -172,7 +169,7 @@ int repl() {
           printf("%s", couleur_defaut);
       }
 
-      printf("\n\n");
+      printf("\n");
   }
 
   return 0;
