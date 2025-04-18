@@ -229,7 +229,6 @@ sexpr println_valisp(sexpr liste, sexpr env) {
     return NULL;
 }
 
-
 sexpr type_of_valisp(sexpr liste, sexpr env) {
     sexpr a;
     
@@ -290,4 +289,90 @@ sexpr setq_valisp(sexpr liste, sexpr env) {
     res = (sexpr) eval(exp, env); 
     modifier_variable(env, nom, res);
     return res;
+}
+
+sexpr eval_valisp(sexpr liste, sexpr env) {
+    sexpr a;
+    test_nb_parametres(liste, "eval", 1);
+    
+    a = car(liste);
+    
+    if (a == NULL) return NULL;
+    if (!cons_p(a)) erreur(TYPAGE, "eval", "nécessite une liste", a);
+    
+    return eval(a, env);
+}
+
+sexpr apply_valisp(sexpr liste, sexpr env) {
+    sexpr a;
+    sexpr b;
+    
+    test_nb_parametres(liste, "apply", 2);
+    
+    a = car(liste);
+    b = car(cdr(liste));
+    
+    if (a == NULL) return NULL;
+    if (!cons_p(a)) erreur(TYPAGE, "apply", "nécessite une liste", a);
+    
+    return apply(a, b, env);
+}
+
+/* Formes speciales */
+sexpr quote_valisp(sexpr liste, sexpr env) {
+    sexpr a;
+    
+    test_nb_parametres(liste, "quote", 1);
+    
+    a = car(liste);
+    return a;
+}
+
+sexpr lambda_valisp(sexpr liste, sexpr env) {
+    sexpr a;
+    sexpr b;
+    
+    test_nb_parametres(liste, "lambda", );
+    
+    a = car(liste);
+    b = car(cdr(liste));
+    
+    if (a == NULL) return NULL;
+    if (!cons_p(a)) erreur(TYPAGE, "lambda", "nécessite une liste", a);
+    
+    return cons(new_speciale(lambda_valisp), cons(a, b));
+}
+
+sexpr macro_valisp(sexpr liste, sexpr env) {
+    sexpr a;
+    sexpr b;
+    
+    test_nb_parametres(liste, "macro", 2);
+    
+    a = car(liste);
+    b = car(cdr(liste));
+    
+    if (a == NULL) return NULL;
+    if (!cons_p(a)) erreur(TYPAGE, "macro", "nécessite une liste", a);
+    
+    return cons(new_speciale(macro_valisp), cons(a, b));
+
+}
+
+sexpr if_valisp(sexpr liste, sexpr env) {
+    sexpr a;
+    sexpr b;
+    sexpr c;
+    
+    test_nb_parametres(liste, "if", 3);
+    
+    a = car(liste);
+    b = car(cdr(liste));
+    c = car(cdr(cdr(liste)));
+    
+    if (a == NULL) return NULL;
+    if (!cons_p(a)) erreur(TYPAGE, "if", "nécessite une liste", a);
+    
+    return cons(new_speciale(if_valisp), cons(a, cons(b, c)));
+
 }

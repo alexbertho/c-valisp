@@ -26,6 +26,7 @@ sexpr car(sexpr e);
 sexpr cdr(sexpr e);
 void set_car(sexpr e, sexpr nouvelle);
 void set_cdr(sexpr e, sexpr nouvelle);
+int longueur_liste(sexpr e);
 void afficher_liste(sexpr e);
 
 sexpr new_primitive(sexpr (*p)(sexpr, sexpr));
