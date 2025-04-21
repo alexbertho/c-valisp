@@ -107,6 +107,37 @@ int parse_chaine(char *texte, int i, sexpr *res) {
     return i + 1;
 }
 
+int parse_entier(char *texte, int i, sexpr *res) {
+    int sign = 1;
+    int value = 0;
+    int start = i;
+    
+    if (texte[i] == '-') {
+        sign = -1;
+        i++;
+    }
+    
+    if (!est_chiffre(texte[i])) {
+        return -3; 
+    }
+    
+    while (est_chiffre(texte[i])) {
+        value = value * 10 + (texte[i] - '0');
+        i++;
+    }
+    
+    if (!fin_mot(texte[i]) && texte[i] != '\0' && texte[i] != ')') {
+        while (!fin_mot(texte[i]) && texte[i] != '\0' && texte[i] != ')') {
+            i++;
+        }
+        *res = new_symbol(sous_chaine(texte, start, i));
+    } else {
+        *res = new_integer(sign * value);
+    }
+    
+    return i;
+}
+
 int parse_symbole(char *texte, int i, sexpr *res) {
     int deb = i;
     
