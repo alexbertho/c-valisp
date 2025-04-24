@@ -6,6 +6,7 @@
 #include "types.h"
 #include "tests.h"
 #include "primitives.h"
+#include "parseur.h"
 #include "mes_tests.h"
 #include "test_config.h"
 
@@ -80,6 +81,36 @@ int main() {
     #endif
     #ifdef TEST_PRIMITIVES_PRINT
     test_print();
+    #endif
+    #endif
+
+    /* Tests du parseur */
+    #ifdef TEST_PARSEUR
+    test_parseur();
+    #else
+    #ifdef TEST_PARSEUR_ENTIER
+    test_parse_entier();
+    #endif
+    #ifdef TEST_PARSEUR_SYMBOLE
+    test_parse_symbole();
+    #endif
+    #ifdef TEST_PARSEUR_CHAINE
+    test_parse_chaine();
+    #endif
+    #ifdef TEST_PARSEUR_LISTE
+    test_parse_liste();
+    #endif
+    #ifdef TEST_PARSEUR_QUOTE
+    test_parse_quote();
+    #endif
+    #ifdef TEST_PARSEUR_ESPACE
+    test_nettoyer_espaces();
+    #endif
+    #ifdef TEST_PARSEUR_COMPLEXE
+    test_parse_complexe();
+    #endif
+    #ifdef TEST_PARSEUR_ERREURS
+    test_parse_erreurs();
     #endif
     #endif
 

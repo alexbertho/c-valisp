@@ -53,5 +53,21 @@
  void test_car_cdr_cons();
  void test_print();
  void test_primitives();
+
+/***************************************/
+/*                                     */
+/*  Tests pour le fichier parseur.c    */
+/*                                     */
+/***************************************/
+
+void test_parse_entier();
+void test_parse_symbole();
+void test_parse_chaine();
+void test_parse_liste();
+void test_parse_quote();
+void test_nettoyer_espaces();
+void test_parse_complexe();
+void test_parse_erreurs();
+void test_parseur();
  
  #endif /* MES_TESTS_H */
