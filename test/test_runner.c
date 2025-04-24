@@ -7,6 +7,7 @@
 #include "tests.h"
 #include "primitives.h"
 #include "parseur.h"
+#include "environnement.h"
 #include "mes_tests.h"
 #include "test_config.h"
 
@@ -82,6 +83,14 @@ int main() {
     #ifdef TEST_PRIMITIVES_PRINT
     test_print();
     #endif
+    #endif
+
+    /* Tests de l'environnement */
+    #ifdef TEST_ENV_INIT
+    test_initialiser_environnement();
+    #endif
+    #ifdef TEST_ENV_MANIP
+    test_manipuler_environnement();
     #endif
 
     /* Tests du parseur */

@@ -12,7 +12,9 @@
 #define TEST_ALLOCATEUR    
 #define TEST_TYPES         
 #define TEST_PRIMITIVES    
-#define TEST_PARSEUR
+#define TEST_PARSEUR 
+#define TEST_ENV_INIT
+#define TEST_ENV_MANIP
  
 /* Configuration des tests individuels pour l'allocateur */
 #ifdef TEST_ALLOCATEUR
