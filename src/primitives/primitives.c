@@ -168,6 +168,7 @@ new_symbol("t")
 sexpr less_than_valisp(sexpr liste, sexpr env) {
     sexpr a;
     sexpr b;
+    bool res;
     
     test_nb_parametres(liste, "<", 2);
     
@@ -176,13 +177,40 @@ sexpr less_than_valisp(sexpr liste, sexpr env) {
     
     if (!integer_p(a)) erreur(TYPAGE, "<", "nécessite un entier", a);
     if (!integer_p(b)) erreur(TYPAGE, "<", "nécessite un entier", b);
+
+    res = (bool) get_integer(a) < get_integer(b);
+    if (res) {
+        return new_symbol("t");
+    } else {
+        return NULL;
+    }
+}
+
+sexpr sup_than_valisp(sexpr liste, sexpr env) {
+    sexpr a;
+    sexpr b;
+    bool res;
     
-    return new_integer(get_integer(a) < get_integer(b));
+    test_nb_parametres(liste, ">", 2);
+    
+    a = car(liste);
+    b = car(cdr(liste));
+    
+    if (!integer_p(a)) erreur(TYPAGE, ">", "nécessite un entier", a);
+    if (!integer_p(b)) erreur(TYPAGE, ">", "nécessite un entier", b);
+
+    res = (bool) get_integer(a) > get_integer(b);
+    if (res) {
+        return new_symbol("t");
+    } else {
+        return NULL;
+    }
 }
 
 sexpr equal_valisp(sexpr liste, sexpr env) {
     sexpr a;
     sexpr b;
+    bool res;
     
     test_nb_parametres(liste, "=", 2);
     
@@ -191,8 +219,13 @@ sexpr equal_valisp(sexpr liste, sexpr env) {
     
     if (!integer_p(a)) erreur(TYPAGE, "=", "nécessite un entier", a);
     if (!integer_p(b)) erreur(TYPAGE, "=", "nécessite un entier", b);
-    
-    return new_integer(get_integer(a) == get_integer(b));
+
+    res = (bool) get_integer(a) == get_integer(b);
+    if (res) {
+        return new_symbol("t");
+    } else {
+        return NULL;
+    }
 }
 
 /**
@@ -336,7 +369,7 @@ sexpr macro_valisp(sexpr liste, sexpr env) {
 sexpr if_valisp(sexpr liste, sexpr env) {
     sexpr condition, alors, sinon;
     
-    test_nb_parametres(liste, "if", 2);
+    test_nb_parametres(liste, "if", 3);
     
     condition = car(liste);
     alors = car(cdr(liste));

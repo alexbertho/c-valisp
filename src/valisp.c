@@ -38,6 +38,7 @@ void charger_primitives() {
   charger_une_primitive("%",        mod_valisp);
   charger_une_primitive("=",        equal_valisp);
   charger_une_primitive("<",        less_than_valisp);
+  charger_une_primitive(">",        sup_than_valisp);
   charger_une_primitive("print",    print_valisp);
   charger_une_primitive("println",  println_valisp);
   charger_une_primitive("type-of",  type_of_valisp);
@@ -117,6 +118,12 @@ int repl() {
       if (strcmp(ligne, "@env") == 0) { repl_env() ; continue; }
       if (strcmp(ligne, "@mem") == 0) { valisp_stat_memoire(); printf("\n\n"); continue;}
       if (strcmp(ligne, "@mmem")== 0) { afficher_memoire(); continue;}
+      if (strcmp(ligne, "@rm")== 0) { ramasse_miette_liberer(); continue;}
+      if (strcmp(ligne, "@exit") == 0) { free(ligne); break; }
+      {
+        /* code */
+      }
+      
 
       if (!setjmp(*buf)) {
 

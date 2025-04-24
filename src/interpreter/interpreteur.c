@@ -8,16 +8,8 @@
 
 
 sexpr eval_list(sexpr liste, sexpr env) {
-    sexpr res = NULL;
-
     if (liste == NULL) return NULL;
-
-    for(; liste != NULL; liste = cdr(liste)) {
-        /* Cela inverse l'ordre des éléments */
-        res = cons(eval(car(liste), env), res);
-    }
-
-    return res;
+    return cons (eval (car(liste),env) , eval_list(cdr(liste), env));
 }
 
 sexpr bind(sexpr variables, sexpr liste, sexpr env) {
@@ -62,23 +54,8 @@ sexpr apply(sexpr fonction, sexpr liste, sexpr env) {
     sexpr result;
     sexpr nouvel_env;
     sexpr expansion;
-
-    /*    
-    printf("Appel de la fonction : ");
-    afficher(fonction);
-    printf("\n");
-    printf("Avec la liste : ");
-    afficher(liste);
-    printf("\n");
-    */
     
     eval_fonction = eval(fonction, env);
-
-    /*
-    printf("Fonction évaluée : ");
-    afficher(eval_fonction);
-    printf("\n");
-    */
     
     if (spec_p(eval_fonction)) {
         return run_prim(eval_fonction, liste, env);
@@ -100,6 +77,7 @@ sexpr apply(sexpr fonction, sexpr liste, sexpr env) {
                 nouvel_env = bind(params, args_evalues, env);
                 
                 result = NULL;
+
                 /* 
                  * Parcourir séquentiellement toutes les expressions du corps
                  * Exemple: pour (lambda (x y) (print x) (print y) (+ x y))
@@ -123,7 +101,6 @@ sexpr apply(sexpr fonction, sexpr liste, sexpr env) {
                 while (body != NULL) {
                     expansion = eval(car(body), nouvel_env);
                     body = cdr(body);
-                    
                 }
                 /* 
                  * Étape supplémentaire pour les macros:

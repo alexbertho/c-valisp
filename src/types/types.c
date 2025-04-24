@@ -233,8 +233,10 @@ void afficher(sexpr val) {
             printf(")");
             break;
         case prim:
+            printf("#<primitive>");
             break;
         case spec:
+            printf("#<speciale>");
             break;
         default:
             break;
