@@ -399,8 +399,10 @@ void test_comparaisons() {
     env = NULL;
     
     /* Test less_than */
+    /* Vrai : t (symbole)
+     * Faux : nil */
     
-    /* Test 1: 5 < 10 */
+    /* Test 1: (< 5 10)  => t*/
     val1 = 5;
     val2 = 10;
     a = new_integer(val1);
@@ -410,8 +412,8 @@ void test_comparaisons() {
     
     afficher_test_comparaison("less_than_valisp", val1, "<", val2, c);
     
-    b = RUN_TEST(integer_p(c)) && b;
-    b = RUN_TEST(get_integer(c) == (val1 < val2 ? 1 : 0)) && b;
+    b = RUN_TEST(symbol_p(c)) && b;
+    b = RUN_TEST(strcmp(get_symbol(c), "t") == 0) && b;
 
     ok_test(b);
     
@@ -425,8 +427,7 @@ void test_comparaisons() {
     
     afficher_test_comparaison("less_than_valisp", val1, "<", val2, c);
     
-    b = RUN_TEST(integer_p(c)) && b;
-    b = RUN_TEST(get_integer(c) == (val1 < val2 ? 1 : 0)) && b;
+    b = RUN_TEST(c == NULL) && b;
 
     ok_test(b);
     
@@ -442,8 +443,8 @@ void test_comparaisons() {
     
     afficher_test_comparaison("equal_valisp", val1, "=", val2, c);
     
-    b = RUN_TEST(integer_p(c)) && b;
-    b = RUN_TEST(get_integer(c) == (val1 == val2 ? 1 : 0)) && b;
+    b = RUN_TEST(symbol_p(c)) && b;
+    b = RUN_TEST(strcmp(get_symbol(c), "t") == 0) && b;
 
     ok_test(b);
     
@@ -457,8 +458,7 @@ void test_comparaisons() {
 
     afficher_test_comparaison("equal_valisp", val1, "=", val2, c);
     
-    b = RUN_TEST(integer_p(c)) && b;
-    b = RUN_TEST(get_integer(c) == (val1 == val2 ? 1 : 0)) && b;
+    b = RUN_TEST(c == NULL) && b;
 
     ok_test(b);
     printf("\n");

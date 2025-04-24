@@ -54,6 +54,17 @@
  void test_print();
  void test_primitives();
 
+
+/******************************************/
+/*                                        */
+/*  Tests pour le fichier environnement.c */
+/*                                        */
+/******************************************/
+
+void test_environnement_global();
+void test_initialiser_environnement();
+
+
 /***************************************/
 /*                                     */
 /*  Tests pour le fichier parseur.c    */
