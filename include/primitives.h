@@ -11,6 +11,7 @@ sexpr cdr_valisp(sexpr liste, sexpr env);
 sexpr cons_valisp(sexpr liste, sexpr env);
 sexpr add_valisp(sexpr liste, sexpr env);
 sexpr less_than_valisp(sexpr liste, sexpr env);
+sexpr sup_than_valisp(sexpr liste, sexpr env);
 sexpr sub_valisp(sexpr liste, sexpr env);
 sexpr produit_valisp(sexpr liste, sexpr env);
 sexpr div_valisp(sexpr liste, sexpr env);
