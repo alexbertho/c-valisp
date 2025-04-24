@@ -65,9 +65,7 @@ int nettoyer_espaces(char *texte, int i) {
         if (est_espace(texte[i])) {
             i++;
         } else if (texte[i] == ';') {
-            while (texte[i] != '\0' && texte[i] != '\n') {
-                i++;
-            }
+            for(; texte[i] != '\0' && texte[i] != '\n'; i++);
         } else {
             break;
         }
