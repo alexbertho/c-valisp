@@ -228,35 +228,41 @@ sexpr equal_valisp(sexpr liste, sexpr env) {
     }
 }
 
-/**
- * (print "x+y=" 12 "+" (+ 2 3) ) ")
- *  faut que la fonction print interprète les arguments, par exemple: (+ 2 3) se transforme en "5"
- * 
- */
 sexpr print_valisp(sexpr liste, sexpr env) {
     sexpr a;
-    
-    test_nb_parametres(liste, "print", 1);
-    
+    sexpr courant = liste;
+        
     a = car(liste);
     
     if (a == NULL) erreur(TYPAGE, "print", "nécessite une valeur", a);
-    
-    afficher(a);
+
+    while (courant != NULL) {
+        a = car(courant);
+        if (a == NULL) erreur(TYPAGE, "print", "nécessite une valeur", a);
+        
+        afficher(a);
+        courant = cdr(courant);
+    }
     
     return NULL;
 }
 
 sexpr println_valisp(sexpr liste, sexpr env) {
     sexpr a;
-    
-    test_nb_parametres(liste, "println", 1);
-    
+    sexpr courant = liste;
+        
     a = car(liste);
     
     if (a == NULL) erreur(TYPAGE, "println", "nécessite une valeur", a);
     
-    afficher(a);
+    while (courant != NULL) {
+        a = car(courant);
+        if (a == NULL) erreur(TYPAGE, "println", "nécessite une valeur", a);
+        
+        afficher(a);
+        courant = cdr(courant);
+    }
+
     printf("\n");
     
     return NULL;
