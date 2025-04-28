@@ -5,6 +5,7 @@
 
 #include "allocateur.h"
 #include "erreur.h"
+#include "lifo.h"
 
 
 bloc MEMOIRE_DYNAMIQUE[TAILLE_MEMOIRE_DYNAMIQUE];
@@ -94,7 +95,8 @@ void *allocateur_malloc(size_t size) {
     
     int i = rechercher_bloc_libre(size);
     if (i == -1) {
-        return NULL; 
+        /* Pas de bloc libre trouvé */
+        return NULL;
     }
     
     taille_dispo = taille_bloc(i);
@@ -119,6 +121,8 @@ void *allocateur_malloc(size_t size) {
         /* Sinon, utiliser tout le bloc */
         set_use(i);
     }
+
+    pile_ajout(MEMOIRE_DYNAMIQUE[i]);
     
     return &MEMOIRE_DYNAMIQUE[i + 1];
 }
@@ -169,7 +173,7 @@ void ramasse_miette_liberer() {
     int i = 0;
     
     while (bloc_suivant(i) != i) {
-        if (bloc_libre(i)) { /* Bloc à supprimer */
+        if (!bloc_libre(i)) { /* Bloc à supprimer */
             i = free_fusion(i);  
         } else {
             i = bloc_suivant(i);

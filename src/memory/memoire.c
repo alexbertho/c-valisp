@@ -4,18 +4,19 @@
 #include "erreur.h"
 #include "types.h"
 
-
 void *valisp_malloc(size_t size) {
     void *ptr = allocateur_malloc(size);
     if (ptr == NULL) {
-        ERREUR_FATALE("Mémoire remplis");
+        ramasse_miette_liberer();
+        ptr = allocateur_malloc(size);
+        if (ptr == NULL) {
+            erreur(MEMOIRE, "malloc", "Allocation de mémoire échouée",NULL);
+        }
     }
     return ptr;
 }
 
-/*
 void ramasse_miette_parcourir_et_marquer(sexpr s) {
-    afficher(s);
     if (s == NULL) {
         return;
     }
@@ -35,22 +36,7 @@ void ramasse_miette_parcourir_et_marquer(sexpr s) {
             ramasse_miette_poser_marque(str - 1);
         }
     } 
-}
-*/
-
-void ramasse_miette_parcourir_et_marquer(sexpr s) {
-    if (s == NULL || ramasse_miette_lire_marque(s)) {
-        return;
-    }
-
-    if (cons_p(s)) {
-        ramasse_miette_poser_marque(s);
-
-        ramasse_miette_parcourir_et_marquer(car(s));
-        ramasse_miette_parcourir_et_marquer(cdr(s));
-    } else if(string_p(s) || symbol_p(s)) {
-        ramasse_miette_poser_marque(s);
-    } 
+    /* Pour les entiers et primitives, il n'y a rien à faire */
 }
 
 void valisp_ramasse_miettes(sexpr env) {

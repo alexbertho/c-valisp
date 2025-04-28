@@ -157,14 +157,6 @@ sexpr mod_valisp(sexpr liste, sexpr env) {
     return new_integer(get_integer(a) % get_integer(b));
 }
 
-/*
-
-False => nil (NULL)
-new_symbol("t") 
-
-(defun > (a b)
-    (if (< a b) b a))
-*/
 sexpr less_than_valisp(sexpr liste, sexpr env) {
     sexpr a;
     sexpr b;
@@ -244,7 +236,7 @@ sexpr print_valisp(sexpr liste, sexpr env) {
         courant = cdr(courant);
     }
     
-    return NULL;
+    return a;
 }
 
 sexpr println_valisp(sexpr liste, sexpr env) {
@@ -265,7 +257,7 @@ sexpr println_valisp(sexpr liste, sexpr env) {
 
     printf("\n");
     
-    return NULL;
+    return a;
 }
 
 sexpr type_of_valisp(sexpr liste, sexpr env) {
