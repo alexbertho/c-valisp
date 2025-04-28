@@ -11,9 +11,9 @@ valisp/
 ├── include/                 # Fichiers d'en-tête (.h)
 ├── lib/                     # Bibliothèques interne en lisp
 ├── src/                     # Code source de l'application
-│   ├── interpreter/         # Implémentation de l'interpréteur
+│   ├── env/                 # Implémentation de l'environnement
+│   ├── io/                  # Implémentation de l'entrée/sortie
 │   ├── memory/              # Implémentation de la gestion mémoire
-│   ├── parser/              # Implémentation de l'analyseur syntaxique
 │   ├── types/               # Implémentation des types
 │   ├── primitives/          # Implémentation des primitives
 │   ├── utils/               # Implémentation des utilitaires
