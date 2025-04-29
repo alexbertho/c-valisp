@@ -63,6 +63,47 @@ Pour nettoyer les fichiers générés:
 make clean
 ```
 
+## Exécution
+
+Une fois compilé, vous pouvez exécuter le programme avec:
+
+```bash
+./bin/valisp [OPTIONS]
+```
+
+### Options disponibles
+
+| Option | Description |
+|--------|-------------|
+| `-l, --load <fichier>` | Charge et exécute un fichier Lisp puis lance le REPL |
+| `-s, --script <fichier>` | Exécute un fichier Lisp comme script (non implémenté) |
+| `-n, --no-stdlib` | Désactive le chargement de la bibliothèque standard |
+| `-h, --help` | Affiche l'aide et quitte le programme |
+| `-d, --debug` | Active le mode de débogage (non implémenté) |
+
+### Commandes spéciales dans le REPL
+
+| Commande | Description |
+|----------|-------------|
+| `@env` | Affiche l'environnement actuel |
+| `@mem` | Affiche des statistiques sur l'utilisation de la mémoire |
+| `@mmem` | Affiche des informations détaillées sur la mémoire |
+| `@rm` | Force l'exécution du ramasse-miettes |
+| `@exit` | Quitte le REPL |
+
+### Exemple d'utilisation
+
+```bash
+# Lancer le REPL interactif
+./bin/valisp
+
+# Charger un fichier Lisp puis lancer le REPL
+./bin/valisp -l mon_fichier.lisp
+
+# Désactiver la bibliothèque standard
+./bin/valisp -n
+```
+
 ## Tests
 
 Le projet inclut une suite de tests pour vérifier le bon fonctionnement des différents composants:
