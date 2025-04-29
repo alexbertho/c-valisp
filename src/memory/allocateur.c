@@ -122,7 +122,7 @@ void *allocateur_malloc(size_t size) {
         set_use(i);
     }
 
-    pile_ajout(MEMOIRE_DYNAMIQUE[i]);
+/*     pile_ajout(MEMOIRE_DYNAMIQUE[i]); */
     
     return &MEMOIRE_DYNAMIQUE[i + 1];
 }
@@ -191,5 +191,4 @@ void allocateur_free(void *ptr) {
     /*Maintenant on doit trouvé le bloc courrespondant c'est ne pas forcemment i-1*/
     for(i=0; bloc_indice <= bloc_suivant(i); i=bloc_suivant(i));
     allocateur_free_bloc(i);
-
 }

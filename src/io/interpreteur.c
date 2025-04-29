@@ -113,10 +113,7 @@ sexpr apply(sexpr fonction, sexpr liste, sexpr env) {
             }
         }
     }
-
-    fin:
         
-    
     erreur(TYPAGE, "apply", "Ne peut pas appliquer cette expression comme une fonction", eval_fonction);
     return NULL;
 }
