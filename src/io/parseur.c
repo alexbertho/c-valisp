@@ -192,13 +192,11 @@ int parse_liste(char *texte, int i, sexpr *res) {
 
 int parseur(char* texte, int i, sexpr* res) {
     sexpr e = NULL;
-    
     i = nettoyer_espaces(texte, i);
     
     if (texte[i] == '\0') {
         return -1; 
     }
-    
     if (texte[i] == '(') {
         i++; 
         return parse_liste(texte, i, res);
@@ -222,9 +220,34 @@ int parseur(char* texte, int i, sexpr* res) {
         return parse_symbole(texte, i, res);
     } 
     else if (texte[i] == ')') {
-        return -4; 
+        return -4;
     } 
     else {
         return -3; 
     }
+}
+
+int valisp_read(char *texte, sexpr *res) {
+    int i;
+    *res = NULL;
+    i = parseur(texte, 0, res);
+    i = nettoyer_espaces(texte,i);
+    if (i>0 && texte[i] == '\0') return 0;
+    return i;
+}
+
+int ajout_buffer(char *buffer, int position, char *chaine) {
+    int i;
+    for (i=0; chaine[i] != '\0'; i++) {
+        buffer[position+i] = chaine[i];
+    }
+    buffer[position+i] = '\n';
+    buffer[position+i+1] = '\0';
+    return position+i+1;
+}
+
+void supprime_retour_ligne_finale_buffer(char *buffer) {
+    int i;
+    for (i=0; buffer[i] != '\0'; i++);
+    if (buffer[i-1] == '\n') buffer[i-1] = '\0';
 }
