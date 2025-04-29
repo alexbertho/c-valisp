@@ -39,6 +39,28 @@ valisp/
 - **Primitives du langage**: Fonctions de base du langage Lisp
 - **Tests intégrés**: Suite de tests pour vérifier le bon fonctionnement des composants
 
+## Prérequis
+
+Avant de compiler le projet, assurez-vous d'avoir installé la bibliothèque libreadline-dev pour l'interface REPL interactive:
+
+Sur les systèmes Debian/Ubuntu:
+
+```bash
+sudo apt-get install libreadline-dev
+```
+
+Sur les systèmes Fedora/RHEL:
+
+```bash
+sudo dnf install readline-devel
+```
+
+Sur les systèmes Arch Linux:
+
+```bash
+sudo pacman -S readline
+```
+
 ## Compilation
 
 Pour compiler le projet, utilisez:
