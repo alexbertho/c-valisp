@@ -17,6 +17,7 @@ void info_bloc(size_t i) {
     int s = bloc_suivant(i);
     char * u = usage_bloc(i) ? "[x]" : "[ ]";
 
+    /* Format adapté pour afficher l'adresse 64 bits */
     printf("%-7s %-18p %7d → %7ld → %-7d (%6d)\n",
            u, (void *) &MEMOIRE_DYNAMIQUE[i], p, i, s, t);
 }

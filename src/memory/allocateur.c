@@ -10,8 +10,14 @@
 
 bloc MEMOIRE_DYNAMIQUE[TAILLE_MEMOIRE_DYNAMIQUE];
 
+/* Adaptation pour utiliser 64 bits :
+ * - bit 63 : rm (ramasse-miettes)
+ * - bits 32-62 : precedant (31 bits)
+ * - bit 31 : libre
+ * - bits 0-30 : suivant (31 bits)
+ */
 bloc cons_bloc(int rm, int precedant, int libre, int suivant) {
-    return (rm << 31) | (precedant << 16) | (libre << 15) | suivant;
+    return ((uint64_t)rm << 63) | ((uint64_t)precedant << 32) | ((uint64_t)libre << 31) | (uint64_t)suivant;
 }
 
 void initialiser_memoire_dynamique() {
@@ -21,30 +27,37 @@ void initialiser_memoire_dynamique() {
     MEMOIRE_DYNAMIQUE[dernier_index] = cons_bloc(0, 0, 1, dernier_index);
 }
 
+/* Extraction des 31 bits de l'indice suivant (bits 0-30) */
 int bloc_suivant(int i) {
-    return MEMOIRE_DYNAMIQUE[i] & 0x7FFF;
+    return MEMOIRE_DYNAMIQUE[i] & 0x7FFFFFFF;
 }
 
+/* Extraction des 31 bits de l'indice précédent (bits 32-62) */
 int bloc_precedant(int i) {
-    return (MEMOIRE_DYNAMIQUE[i] >> 16) & 0x7FFF;
+    return (MEMOIRE_DYNAMIQUE[i] >> 32) & 0x7FFFFFFF;
 }
 
+/* Extraction du bit d'usage (bit 31) */
 int usage_bloc(int i) {
-    return (MEMOIRE_DYNAMIQUE[i] >> 15) & 1;
-}
-
-int rm_bloc(int i) {
     return (MEMOIRE_DYNAMIQUE[i] >> 31) & 1;
 }
 
+/* Extraction du bit de ramasse-miettes (bit 63) */
+int rm_bloc(int i) {
+    return (MEMOIRE_DYNAMIQUE[i] >> 63) & 1;
+}
+
+/* Activation du bit d'usage (bit 31) */
 void set_use(int i) {
-    MEMOIRE_DYNAMIQUE[i] = MEMOIRE_DYNAMIQUE[i] | (1 << 15);
+    MEMOIRE_DYNAMIQUE[i] = MEMOIRE_DYNAMIQUE[i] | ((uint64_t)1 << 31);
 }
 
+/* Désactivation du bit d'usage (bit 31) */
 void set_free(int i) {
-    MEMOIRE_DYNAMIQUE[i] = MEMOIRE_DYNAMIQUE[i] & ~(1 << 15);
+    MEMOIRE_DYNAMIQUE[i] = MEMOIRE_DYNAMIQUE[i] & ~((uint64_t)1 << 31);
 }
 
+/* Mise à jour de l'indice précédent (bits 32-62) */
 void set_precedent(int a, int b) {
     int rm = rm_bloc(a);
     int libre = usage_bloc(a);
@@ -52,6 +65,7 @@ void set_precedent(int a, int b) {
     MEMOIRE_DYNAMIQUE[a] = cons_bloc(rm, b, libre, suivant);
 }
 
+/* Mise à jour de l'indice suivant (bits 0-30) */
 void set_successeur(int a, int b) {
     int rm = rm_bloc(a);
     int precedent = bloc_precedant(a);
@@ -121,18 +135,18 @@ void *allocateur_malloc(size_t size) {
         /* Sinon, utiliser tout le bloc */
         set_use(i);
     }
-
-/*     pile_ajout(MEMOIRE_DYNAMIQUE[i]); */
     
     return &MEMOIRE_DYNAMIQUE[i + 1];
 }
 
+/* Fonction adaptée pour les blocs 64 bits */
 int ramasse_miette_lire_marque(void * ptr) {
     int i = pointeur_vers_indice(ptr);
     bloc *bloc_ptr = &MEMOIRE_DYNAMIQUE[i];
-    return (*bloc_ptr >> 31) & 1;
+    return (*bloc_ptr >> 63) & 1;  /* Bit 63 pour le ramasse-miettes */
 }
 
+/* Fonction adaptée pour les blocs 64 bits */
 void ramasse_miette_poser_marque(void * ptr) {
     int i = pointeur_vers_indice(ptr);
     bloc *bloc_ptr = &MEMOIRE_DYNAMIQUE[i];
@@ -140,7 +154,7 @@ void ramasse_miette_poser_marque(void * ptr) {
     if(ramasse_miette_lire_marque(ptr)) {
         ERREUR_FATALE("LE BLOC EST DEJA MARQUE");
     }
-    *bloc_ptr |= (1 << 31);
+    *bloc_ptr |= ((uint64_t)1 << 63);  /* Activation du bit 63 */
 }
 
 int bloc_libre(int i) {
