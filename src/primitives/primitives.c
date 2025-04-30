@@ -54,7 +54,7 @@ sexpr cons_valisp(sexpr liste, sexpr env) {
 sexpr add_valisp(sexpr liste, sexpr env) {
     sexpr a;
     sexpr courant = liste;
-    int somme=0;
+    valisp_integer_t somme = 0;
 
     if (liste == NULL) return new_integer(0);
 
@@ -62,40 +62,31 @@ sexpr add_valisp(sexpr liste, sexpr env) {
         a = car(courant);
         if (!integer_p(a)) erreur(TYPAGE, "+", "nécessite un entier", a);
 
-        somme += get_integer(a);
+        somme = valisp_add(somme, get_integer(a));
         courant = cdr(courant);
-        
     }
     return new_integer(somme);
 } 
 
-/*
-(- 10 8) => 2
-(- 10)   => -10
-
-*/
 sexpr sub_valisp(sexpr liste, sexpr env) {
     sexpr a;
     sexpr courant = liste;
-    int diff;
+    valisp_integer_t diff;
 
     if (liste == NULL) return new_integer(0);
 
-
-    /*A ameliorer !*/
     a = car(courant);
     if (!integer_p(a)) erreur(TYPAGE, "-", "nécessite un entier", a);
     diff = get_integer(a);
     courant = cdr(courant);
-    if (courant == NULL) return new_integer(-diff);
+    if (courant == NULL) return new_integer(valisp_sub(0, diff)); /* -n = 0-n */
 
     while (courant != NULL){
         a = car(courant);
         if (!integer_p(a)) erreur(TYPAGE, "-", "nécessite un entier", a);
 
-        diff -= get_integer(a);
+        diff = valisp_sub(diff, get_integer(a));
         courant = cdr(courant);
-        
     }
     return new_integer(diff);
 }
@@ -103,7 +94,7 @@ sexpr sub_valisp(sexpr liste, sexpr env) {
 sexpr produit_valisp(sexpr liste, sexpr env) {
     sexpr a;
     sexpr courant = liste;
-    int produit=1;
+    valisp_integer_t produit = 1;
 
     if (liste == NULL) return new_integer(1);
 
@@ -111,33 +102,42 @@ sexpr produit_valisp(sexpr liste, sexpr env) {
         a = car(courant);
         if (!integer_p(a)) erreur(TYPAGE, "*", "nécessite un entier", a);
 
-        produit *= get_integer(a);
+        produit = valisp_mul(produit, get_integer(a));
         courant = cdr(courant);
-        
     }
     return new_integer(produit);
 }
 
-/*A ameliore et div_valisp 4 renvoie 0 au lieux de 1/4 ne gere pas les floatants*/
 sexpr div_valisp(sexpr liste, sexpr env) {
     sexpr a;
     sexpr courant = liste;
-    int quotient;
+    valisp_integer_t quotient;
+    valisp_integer_t diviseur;
 
-    /*A ameliorer !*/
     a = car(courant);
-    if (!integer_p(a)) erreur(TYPAGE, "-", "nécessite un entier", a);
+    if (!integer_p(a)) erreur(TYPAGE, "/", "nécessite un entier", a);
     quotient = get_integer(a);
     courant = cdr(courant);
-    if (courant == NULL) return new_integer(1/quotient);
+    
+    if (courant == NULL) {
+        /* 1/n */
+        if (quotient == 0) {
+            erreur(DIVISION_PAR_ZERO, "/", "Division par zéro", NULL);
+        }
+        return new_integer(valisp_div(1, quotient));
+    }
 
     while (courant != NULL){
         a = car(courant);
         if (!integer_p(a)) erreur(TYPAGE, "/", "nécessite un entier", a);
-
-        quotient /= get_integer(a);
-        courant = cdr(courant);
         
+        diviseur = get_integer(a);
+        if (diviseur == 0) {
+            erreur(DIVISION_PAR_ZERO, "/", "Division par zéro", NULL);
+        }
+        
+        quotient = valisp_div(quotient, diviseur);
+        courant = cdr(courant);
     }
     return new_integer(quotient);
 }
@@ -145,6 +145,7 @@ sexpr div_valisp(sexpr liste, sexpr env) {
 sexpr mod_valisp(sexpr liste, sexpr env) {
     sexpr a;
     sexpr b;
+    valisp_integer_t diviseur;
     
     test_nb_parametres(liste, "mod", 2);
     
@@ -154,13 +155,17 @@ sexpr mod_valisp(sexpr liste, sexpr env) {
     if (!integer_p(a)) erreur(TYPAGE, "mod", "nécessite un entier", a);
     if (!integer_p(b)) erreur(TYPAGE, "mod", "nécessite un entier", b);
     
-    return new_integer(get_integer(a) % get_integer(b));
+    diviseur = get_integer(b);
+    if (diviseur == 0) {
+        erreur(DIVISION_PAR_ZERO, "mod", "Modulo par zéro", NULL);
+    }
+    
+    return new_integer(valisp_mod(get_integer(a), diviseur));
 }
 
 sexpr less_than_valisp(sexpr liste, sexpr env) {
     sexpr a;
     sexpr b;
-    bool res;
     
     test_nb_parametres(liste, "<", 2);
     
@@ -170,8 +175,7 @@ sexpr less_than_valisp(sexpr liste, sexpr env) {
     if (!integer_p(a)) erreur(TYPAGE, "<", "nécessite un entier", a);
     if (!integer_p(b)) erreur(TYPAGE, "<", "nécessite un entier", b);
 
-    res = (bool) get_integer(a) < get_integer(b);
-    if (res) {
+    if (valisp_lt(get_integer(a), get_integer(b))) {
         return new_symbol("t");
     } else {
         return NULL;
@@ -181,7 +185,6 @@ sexpr less_than_valisp(sexpr liste, sexpr env) {
 sexpr sup_than_valisp(sexpr liste, sexpr env) {
     sexpr a;
     sexpr b;
-    bool res;
     
     test_nb_parametres(liste, ">", 2);
     
@@ -191,8 +194,7 @@ sexpr sup_than_valisp(sexpr liste, sexpr env) {
     if (!integer_p(a)) erreur(TYPAGE, ">", "nécessite un entier", a);
     if (!integer_p(b)) erreur(TYPAGE, ">", "nécessite un entier", b);
 
-    res = (bool) get_integer(a) > get_integer(b);
-    if (res) {
+    if (valisp_gt(get_integer(a), get_integer(b))) {
         return new_symbol("t");
     } else {
         return NULL;
@@ -202,7 +204,6 @@ sexpr sup_than_valisp(sexpr liste, sexpr env) {
 sexpr equal_valisp(sexpr liste, sexpr env) {
     sexpr a;
     sexpr b;
-    bool res;
     
     test_nb_parametres(liste, "=", 2);
     
@@ -212,8 +213,7 @@ sexpr equal_valisp(sexpr liste, sexpr env) {
     if (!integer_p(a)) erreur(TYPAGE, "=", "nécessite un entier", a);
     if (!integer_p(b)) erreur(TYPAGE, "=", "nécessite un entier", b);
 
-    res = (bool) get_integer(a) == get_integer(b);
-    if (res) {
+    if (valisp_eq(get_integer(a), get_integer(b))) {
         return new_symbol("t");
     } else {
         return NULL;

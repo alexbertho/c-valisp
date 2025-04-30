@@ -1,7 +1,9 @@
 #include <string.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 #include "types.h"
+#include "valisp_numeric.h"
 #include "memoire.h"
 #include "erreur.h"
 
@@ -20,7 +22,7 @@ typedef struct {
 } valisp_cons;
 
 typedef union {
-    int INTEGER;
+    valisp_integer_t INTEGER;  /* Utilisation du type abstrait */
     char *STRING;
     valisp_cons CONS;
     sexpr (*PRIMITIVE) (sexpr, sexpr);
@@ -35,7 +37,7 @@ struct valisp_object {
 /* PARTIE ENTIERS*/
 /* ==============*/
 
-sexpr new_integer(int i) {
+sexpr new_integer(valisp_integer_t i) {
     sexpr new_int=valisp_malloc(sizeof(struct valisp_object));
     new_int->type = entier;
     new_int->data.INTEGER = i;
@@ -46,7 +48,7 @@ bool integer_p(sexpr val) {
     return (bool) ((val != NULL) && (val->type == entier));
 }
 
-int get_integer(sexpr val) {
+valisp_integer_t get_integer(sexpr val) {
     if (!integer_p(val)) {
         ERREUR_FATALE("get_integer: l'argument n'est pas un entier");
     }
@@ -218,9 +220,13 @@ void afficher(sexpr val) {
     }
 
     switch (val->type) {
-        case entier:
-            printf("%d", get_integer(val));
+        case entier: {
+            /* Utiliser la fonction d'affichage abstraite */
+            char* num_str = valisp_to_string(get_integer(val));
+            printf("%s", num_str);
+            free(num_str); 
             break;
+        }
         case chaine:
             printf("%s", get_string(val));
             break;
@@ -242,4 +248,3 @@ void afficher(sexpr val) {
             break;
     }
 }
-
