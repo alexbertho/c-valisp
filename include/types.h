@@ -1,14 +1,15 @@
-
 #ifndef TYPES_H 
 #define TYPES_H
+
+#include "valisp_numeric.h"
 
 typedef unsigned char bool; 
 struct valisp_object;
 typedef struct valisp_object *sexpr;
 
-sexpr new_integer(int i);
+sexpr new_integer(valisp_integer_t i);
 bool integer_p(sexpr val);
-int get_integer(sexpr val);
+valisp_integer_t get_integer(sexpr val);
 
 char* chaine_vers_memoire(const char *c);
 sexpr new_string(char * c);
@@ -37,9 +38,4 @@ sexpr run_prim(sexpr p, sexpr liste, sexpr env);
 
 void afficher(sexpr val);
 
-
-
 #endif
-
-
-
