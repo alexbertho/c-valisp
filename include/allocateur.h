@@ -4,10 +4,11 @@
 #include <stddef.h>
 #include <stdint.h>
 
-#define TAILLE_MEMOIRE_DYNAMIQUE (1<<15)
+#define TAILLE_MEMOIRE_DYNAMIQUE (1<<24) 
 #define TAILLE_BLOC_OCTETS sizeof(bloc) 
 
-typedef uint32_t bloc;
+/* Changement de type de bloc de uint32_t à uint64_t */
+typedef uint64_t bloc;
 
 void initialiser_memoire_dynamique();
 void *allocateur_malloc(size_t size);
