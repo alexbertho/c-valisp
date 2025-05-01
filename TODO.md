@@ -8,7 +8,7 @@
 - [ ] Corriger pour que `div_valisp 4` renvoie 0.25 au lieu de 0
 - [ ] Reecrire les tests pour les adapter aux nouvelles implementations
 
-# Correctifs intermédiaires
+## Correctifs intermédiaires
 - [ ] Corriger la gestion de la mémoire dans l'allocateur
 - [ ] Résoudre les potentielles fuites mémoire dans `allocateur_free()`
 - [ ] Améliorer la gestion des erreurs dans le parseur
