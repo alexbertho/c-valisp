@@ -98,7 +98,7 @@ Une fois compilé, vous pouvez exécuter le programme avec:
 | Option | Description |
 |--------|-------------|
 | `-l, --load <fichier>` | Charge et exécute un fichier Lisp puis lance le REPL |
-| `-s, --script <fichier>` | Exécute un fichier Lisp comme script (non implémenté) |
+| `-s, --script <fichier>` | Exécute un fichier Lisp comme script |
 | `-n, --no-stdlib` | Désactive le chargement de la bibliothèque standard |
 | `-h, --help` | Affiche l'aide et quitte le programme |
 | `-d, --debug` | Active le mode de débogage (non implémenté) |
