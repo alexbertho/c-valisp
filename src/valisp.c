@@ -58,15 +58,24 @@ char aide[] = "Usage %s [OPTIONS]\n\
 \t-h, --help\n\
 \t-d, --debug (plus tard)\n";
 
-int init_valisp(load_stdlib) {
-    afficher_banniere();
-    printf("Initialisation mémoire");
-    initialiser_memoire();
-    printf("%s [OK]\n%s", couleur_vert, couleur_defaut);
+int init_valisp(load_stdlib, verbose) {
+    if (verbose) {
+        afficher_banniere();
+        printf("Initialisation mémoire");
+    }
 
-    printf("Chargement des primitives");
+    initialiser_memoire();
+
+    if (verbose) {
+        printf("%s [OK]\n%s", couleur_vert, couleur_defaut);
+        printf("Chargement des primitives");
+    }
+
     charger_primitives();
-    printf("%s [OK]\n%s", couleur_vert, couleur_defaut);
+
+    if (verbose) {
+        printf("%s [OK]\n%s", couleur_vert, couleur_defaut);
+    }
 
     if (load_stdlib) {
         printf("Chargement de la blibliothèque standard");
@@ -76,8 +85,9 @@ int init_valisp(load_stdlib) {
             printf("%s [OK]\n%s", couleur_vert, couleur_defaut);
         }
     }
-
-    printf("\n");
+    if (verbose) {
+        printf("\n");
+    }
     return 0;
 }
 
@@ -87,7 +97,7 @@ int valisp_main(int argc, char *argv[]) {
     int option_index = 0;
     bool load_stdlib = 1;
 
-    while ((c = getopt_long(argc, argv, "l:hn", long_options, &option_index)) != -1) {
+    while ((c = getopt_long(argc, argv, "ls:hn", long_options, &option_index)) != -1) {
         switch (c) {
         case 'h':
             printf(aide, argv[0]);
@@ -96,7 +106,7 @@ int valisp_main(int argc, char *argv[]) {
             load_stdlib = 0;
             break;
         case 'l':
-            init_valisp(load_stdlib);
+            init_valisp(load_stdlib, 1);
             printf("Chargement du fichier %s", optarg);      
             if (lire_fichier(optarg) != 0) {
                 printf("%s [KO]\n%s", couleur_rouge, couleur_defaut);
@@ -106,13 +116,21 @@ int valisp_main(int argc, char *argv[]) {
             c = repl();
             printf("À bientôt\n");
             return c;
+        case 's':
+            init_valisp(0, 0);
+            if (lire_fichier(optarg) != 0) {
+                printf("%sLe fichier n'a pas pu être chargé\n%s", couleur_rouge, couleur_defaut);
+                return 1;
+            } else {
+                return 0;
+            }
         default: /* '?' */
             fprintf(stderr, aide, argv[0]);
             exit(EXIT_FAILURE);
         }
     }
 
-    init_valisp(load_stdlib);
+    init_valisp(load_stdlib, 1);
 
     c = repl();
     printf("À bientôt\n");
