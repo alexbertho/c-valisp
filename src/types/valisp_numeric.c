@@ -50,12 +50,10 @@ int valisp_gt(valisp_integer_t a, valisp_integer_t b) {
 }
 
 valisp_integer_t valisp_from_string(const char* str) {
-    /* strtoll n'est pas C90, utilisons atol en combinaison avec une solution personnalisée */
     valisp_integer_t result = 0;
     int sign = 1;
     const char* p = str;
     
-    /* Gérer le signe */
     if (*p == '-') {
         sign = -1;
         p++;
@@ -92,7 +90,6 @@ char* int_to_str(valisp_integer_t num) {
     size_t len;
     char* result;
     
-    /* Gérer le cas zéro explicitement */
     if (num == 0) {
         result = (char*)malloc(2);
         result[0] = '0';
@@ -100,13 +97,11 @@ char* int_to_str(valisp_integer_t num) {
         return result;
     }
     
-    /* Gérer les nombres négatifs */
     if (num < 0) {
         is_negative = 1;
         num = -num;
     }
     
-    /* Marquer la fin de la chaîne */
     *p = '\0';
     p--;
     
@@ -117,17 +112,14 @@ char* int_to_str(valisp_integer_t num) {
         p--;
     }
     
-    /* Ajouter le signe négatif si nécessaire */
     if (is_negative) {
         *p = '-';
         p--;
     }
     
-    /* Calculer la longueur et allouer le résultat */
     len = (buffer + sizeof(buffer) - 1) - (p + 1);
     result = (char*)malloc(len + 1);
     
-    /* Copier le résultat dans la mémoire allouée */
     strcpy(result, p + 1);
     
     return result;
