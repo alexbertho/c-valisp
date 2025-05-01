@@ -6,10 +6,9 @@
 #include "erreur.h"
 #include "interpreteur.h"
 
-
 sexpr eval_list(sexpr liste, sexpr env) {
     if (liste == NULL) return NULL;
-    return cons (eval (car(liste),env) , eval_list(cdr(liste), env));
+    return cons(eval (car(liste),env), eval_list(cdr(liste), env));
 }
 
 sexpr bind(sexpr variables, sexpr liste, sexpr env) {
@@ -24,7 +23,7 @@ sexpr bind(sexpr variables, sexpr liste, sexpr env) {
         if (a != b) {
             erreur(ARITE, "bind", "Nombre d'arguments incorrect", variables);
         }
-        
+
         for (i = a; i > 0; i--) {
             var = car(variables);
             val = car(liste);
@@ -34,7 +33,6 @@ sexpr bind(sexpr variables, sexpr liste, sexpr env) {
             variables = cdr(variables);
             liste = cdr(liste);
         }
-        
         return nouvel_env;
     } else if (symbol_p(variables)) {
         env = cons(cons(variables, liste), env);
@@ -113,7 +111,6 @@ sexpr apply(sexpr fonction, sexpr liste, sexpr env) {
             }
         }
     }
-        
     erreur(TYPAGE, "apply", "Ne peut pas appliquer cette expression comme une fonction", eval_fonction);
     return NULL;
 }

@@ -7,7 +7,7 @@
 #include "environnement.h"
 #include "interpreteur.h"
 
-void test_nb_parametres(sexpr liste, char* fonction, int taille) {
+void test_nb_parametres(sexpr liste, char *fonction, int taille) {
     int compteur = 0;
     sexpr tmp = liste;
     
@@ -23,19 +23,25 @@ void test_nb_parametres(sexpr liste, char* fonction, int taille) {
 
 sexpr car_valisp(sexpr liste, sexpr env) {
     sexpr a;
+
     test_nb_parametres(liste, "car", 1);
+
     a = car(liste);
     if (a == NULL) return NULL;
     if (!cons_p(a)) erreur(TYPAGE, "car", "nécessite une liste", a);
+
     return car(a);
 }
 
 sexpr cdr_valisp(sexpr liste, sexpr env) {
     sexpr a;
+
     test_nb_parametres(liste, "cdr", 1);
+
     a = car(liste);
     if (a == NULL) return NULL;
     if (!cons_p(a)) erreur(TYPAGE, "cdr", "nécessite une liste", a);
+
     return cdr(a);
 }
 
@@ -60,11 +66,13 @@ sexpr add_valisp(sexpr liste, sexpr env) {
 
     while (courant != NULL){
         a = car(courant);
+
         if (!integer_p(a)) erreur(TYPAGE, "+", "nécessite un entier", a);
 
         somme = valisp_add(somme, get_integer(a));
         courant = cdr(courant);
     }
+
     return new_integer(somme);
 } 
 
@@ -76,18 +84,23 @@ sexpr sub_valisp(sexpr liste, sexpr env) {
     if (liste == NULL) return new_integer(0);
 
     a = car(courant);
+
     if (!integer_p(a)) erreur(TYPAGE, "-", "nécessite un entier", a);
+
     diff = get_integer(a);
     courant = cdr(courant);
+
     if (courant == NULL) return new_integer(valisp_sub(0, diff)); /* -n = 0-n */
 
     while (courant != NULL){
         a = car(courant);
+
         if (!integer_p(a)) erreur(TYPAGE, "-", "nécessite un entier", a);
 
         diff = valisp_sub(diff, get_integer(a));
         courant = cdr(courant);
     }
+
     return new_integer(diff);
 }
 
@@ -100,11 +113,13 @@ sexpr produit_valisp(sexpr liste, sexpr env) {
 
     while (courant != NULL){
         a = car(courant);
+
         if (!integer_p(a)) erreur(TYPAGE, "*", "nécessite un entier", a);
 
         produit = valisp_mul(produit, get_integer(a));
         courant = cdr(courant);
     }
+
     return new_integer(produit);
 }
 
@@ -115,7 +130,9 @@ sexpr div_valisp(sexpr liste, sexpr env) {
     valisp_integer_t diviseur;
 
     a = car(courant);
+
     if (!integer_p(a)) erreur(TYPAGE, "/", "nécessite un entier", a);
+
     quotient = get_integer(a);
     courant = cdr(courant);
     
@@ -129,6 +146,7 @@ sexpr div_valisp(sexpr liste, sexpr env) {
 
     while (courant != NULL){
         a = car(courant);
+
         if (!integer_p(a)) erreur(TYPAGE, "/", "nécessite un entier", a);
         
         diviseur = get_integer(a);
@@ -139,6 +157,7 @@ sexpr div_valisp(sexpr liste, sexpr env) {
         quotient = valisp_div(quotient, diviseur);
         courant = cdr(courant);
     }
+
     return new_integer(quotient);
 }
 
@@ -159,7 +178,7 @@ sexpr mod_valisp(sexpr liste, sexpr env) {
     if (diviseur == 0) {
         erreur(DIVISION_PAR_ZERO, "mod", "Modulo par zéro", NULL);
     }
-    
+
     return new_integer(valisp_mod(get_integer(a), diviseur));
 }
 
@@ -230,6 +249,7 @@ sexpr print_valisp(sexpr liste, sexpr env) {
 
     while (courant != NULL) {
         a = car(courant);
+
         if (a == NULL) erreur(TYPAGE, "print", "nécessite une valeur", a);
         
         afficher(a);
@@ -249,6 +269,7 @@ sexpr println_valisp(sexpr liste, sexpr env) {
     
     while (courant != NULL) {
         a = car(courant);
+
         if (a == NULL) erreur(TYPAGE, "println", "nécessite une valeur", a);
         
         afficher(a);
@@ -352,7 +373,6 @@ sexpr apply_valisp(sexpr liste, sexpr env) {
 /* Formes speciales */
 sexpr quote_valisp(sexpr liste, sexpr env) {
     test_nb_parametres(liste, "quote", 1);
-    
     return car(liste);
 }
 

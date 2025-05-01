@@ -190,7 +190,7 @@ int parse_liste(char *texte, int i, sexpr *res) {
     return i + 1; 
 }
 
-int parseur(char* texte, int i, sexpr* res) {
+int parseur(char *texte, int i, sexpr *res) {
     sexpr e = NULL;
     i = nettoyer_espaces(texte, i);
     

@@ -6,6 +6,7 @@
 
 void *valisp_malloc(size_t size) {
     void *ptr = allocateur_malloc(size);
+
     if (ptr == NULL) {
         ramasse_miette_liberer();
         ptr = allocateur_malloc(size);
@@ -13,6 +14,7 @@ void *valisp_malloc(size_t size) {
             erreur(MEMOIRE, "malloc", "Allocation de mémoire échouée",NULL);
         }
     }
+    
     return ptr;
 }
 

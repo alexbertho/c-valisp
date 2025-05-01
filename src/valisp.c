@@ -9,7 +9,6 @@
 #include "repl.h"
 #include "couleurs.h"
 
-
 /********************************/
 /*                              */
 /*  Chargement des primitives   */
@@ -85,14 +84,15 @@ int init_valisp(load_stdlib, verbose) {
             printf("%s [OK]\n%s", couleur_vert, couleur_defaut);
         }
     }
+
     if (verbose) {
         printf("\n");
     }
+
     return 0;
 }
 
 int valisp_main(int argc, char *argv[]) {
-
     int c;
     int option_index = 0;
     bool load_stdlib = 1;

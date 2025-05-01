@@ -4,7 +4,6 @@
 #include "types.h"
 #include <setjmp.h>
 
-
 enum erreurs {
     TYPAGE,            /* Paramètre du mauvais type */
     ARITE,             /* Mauvais nombres de paramètres */
@@ -16,10 +15,11 @@ enum erreurs {
     RUNTIME            /* Vos propres erreurs lancée depuis valisp */
 };
 
-const char* get_nom_erreur(enum erreurs type);
-void erreur_fatale(char  *fichier, int ligne, char* causes);
+const char *get_nom_erreur(enum erreurs type);
+void erreur_fatale(char *fichier, int ligne, char *causes);
 #define ERREUR_FATALE(CAUSE) erreur_fatale(__FILE__, __LINE__, CAUSE)
-void erreur(enum erreurs type, char* fonction, char * explication, sexpr s);
+void erreur(enum erreurs type, char *fonction, char *explication, sexpr s);
 jmp_buf *jump_buffer();
 void afficher_erreur();
+
 #endif

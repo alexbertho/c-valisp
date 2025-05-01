@@ -49,7 +49,7 @@ int valisp_gt(valisp_integer_t a, valisp_integer_t b) {
     return a > b;
 }
 
-valisp_integer_t valisp_from_string(const char* str) {
+valisp_integer_t valisp_from_string(const char *str) {
     valisp_integer_t result = 0;
     int sign = 1;
     const char* p = str;
@@ -83,7 +83,7 @@ valisp_integer_t valisp_from_string(const char* str) {
  * Le non-respect de cette règle entraînera des fuites de mémoire.
  *******************************************************************************
  */
-char* int_to_str(valisp_integer_t num) {
+char *int_to_str(valisp_integer_t num) {
     char buffer[32]; /* Assez grand pour un int64_t */
     char* p = buffer + sizeof(buffer) - 1;
     int is_negative = 0;
@@ -131,6 +131,6 @@ char* int_to_str(valisp_integer_t num) {
  * après utilisation pour éviter les fuites de mémoire.
  *******************************************************************************
  */
-char* valisp_to_string(valisp_integer_t num) {
+char *valisp_to_string(valisp_integer_t num) {
     return int_to_str(num);
 }
