@@ -44,7 +44,7 @@
 
 ## Extensions du système
 - [ ] Implémenter le chargement complet de scripts
-- [ ] Finaliser l'option `-s, --script`
+- [x] Finaliser l'option `-s, --script`
 - [ ] Ajouter une primitive `load` pour charger des fichiers pendant l'exécution
 - [ ] Créer un système de modules/packages
 - [ ] Implémenter un système d'import/export de définitions
