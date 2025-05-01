@@ -2,6 +2,7 @@
 #include <stdio.h>
 
 #include "types.h"
+#include "allocateur.h"
 #include "couleurs.h"
 
 sexpr ENV = NULL;
