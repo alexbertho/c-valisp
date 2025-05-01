@@ -1,13 +1,10 @@
 #include <stddef.h>
-#include <string.h>
 #include <stdio.h>
 
 #include "types.h"
-#include "allocateur.h"
 #include "couleurs.h"
 
 sexpr ENV = NULL;
-
 
 sexpr environnement_global() {
     return ENV;
@@ -101,13 +98,13 @@ void definir_variable_globale(sexpr variable, sexpr valeur) {
     ajouter_a_la_fin(env, variable, valeur);
 }
 
-void charger_une_primitive(char* nom, sexpr (*prim)(sexpr, sexpr)) {
+void charger_une_primitive(char *nom, sexpr (*prim)(sexpr, sexpr)) {
     sexpr variable = new_symbol(nom);
     sexpr primitive = new_primitive(prim);
     definir_variable_globale(variable, primitive);
 }
 
-void charger_une_speciale(char* nom, sexpr (*prim)(sexpr, sexpr)) {
+void charger_une_speciale(char *nom, sexpr (*prim)(sexpr, sexpr)) {
     sexpr variable = new_symbol(nom);
     sexpr speciale = new_speciale(prim);
     definir_variable_globale(variable, speciale);

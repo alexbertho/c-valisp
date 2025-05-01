@@ -18,7 +18,6 @@
 
 #define TAILLE_BUFFER  10000
 
-
 void afficher_banniere() {
     printf("VAΛISP V.0.0.1\n\n");
 
@@ -45,16 +44,15 @@ void repl_env() {
 }
 
 int repl() {
-    char* invite_defaut = "\001\033[1;33m\002va\033[1;32mλ\033[1;33misp>\001\033[1;0m\002 ";
-    char* invite = invite_defaut;
-    char* ligne;
+    char *invite_defaut = "\001\033[1;33m\002va\033[1;32mλ\033[1;33misp>\001\033[1;0m\002 ";
+    char *invite = invite_defaut;
+    char *ligne;
     char BUFFER_READ[TAILLE_BUFFER];
     int POSITION = 0;
     sexpr val;
     int res;
     jmp_buf *buf = jump_buffer();
-/*     sexpr envg = environnement_global();
- */
+/*  sexpr envg = environnement_global();*/
     using_history();
 
     while (1) { /* REPL */

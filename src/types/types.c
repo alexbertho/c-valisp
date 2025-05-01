@@ -39,8 +39,10 @@ struct valisp_object {
 
 sexpr new_integer(valisp_integer_t i) {
     sexpr new_int=valisp_malloc(sizeof(struct valisp_object));
+
     new_int->type = entier;
     new_int->data.INTEGER = i;
+
     return new_int;
 }
 
@@ -72,18 +74,22 @@ char *chaine_vers_memoire(const char *c) {
 
 sexpr new_string(char *c) {
     sexpr new_char=valisp_malloc(sizeof(struct valisp_object));
+
     new_char->type = chaine;
     new_char->data.STRING = chaine_vers_memoire(c);
+
     return new_char;
 }
 
 sexpr new_symbol(char *c) {
     sexpr new_symbol; 
+
     if (strcmp(c, "nil") == 0) {return NULL;}
 
     new_symbol=valisp_malloc(sizeof(struct valisp_object));
     new_symbol->type = symbole;
     new_symbol->data.STRING = chaine_vers_memoire(c);
+
     return new_symbol;   
 }
 
@@ -122,9 +128,11 @@ bool symbol_match_p(sexpr val, const char *chaine) {
 
 sexpr cons(sexpr e1, sexpr e2) {
     sexpr new_cons = valisp_malloc(sizeof(struct valisp_object));
+
     new_cons->type = couple;
     new_cons->data.CONS.car = e1;
     new_cons->data.CONS.cdr = e2;
+
     return new_cons;
 }
 
@@ -137,6 +145,7 @@ bool list_p(sexpr e) {
     if (!cons_p(e)) return (bool) 0;
     if (e->data.CONS.cdr == NULL) return (bool) 1;
     if (cons_p(e->data.CONS.cdr)) return (bool) 1;
+    
     return (bool) 0;
 }
 
@@ -170,6 +179,7 @@ int longueur_liste(sexpr e) {
 
 void afficher_liste(sexpr e) {
     sexpr x = car(e), y = cdr(e);
+
     afficher(x);
 
     if (y==NULL) {
@@ -189,15 +199,19 @@ void afficher_liste(sexpr e) {
 
 sexpr new_primitive(sexpr (*p)(sexpr, sexpr)) {
     sexpr new_prim = valisp_malloc(sizeof(struct valisp_object));
+
     new_prim->type = prim;
     new_prim->data.PRIMITIVE = p;
+
     return new_prim;
 }
 
 sexpr new_speciale(sexpr (*p)(sexpr, sexpr)) {
     sexpr new_spec = valisp_malloc(sizeof(struct valisp_object));
+
     new_spec->type = spec;
     new_spec->data.PRIMITIVE = p;
+    
     return new_spec;
 }
 

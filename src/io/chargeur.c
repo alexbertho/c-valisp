@@ -4,7 +4,6 @@
 
 #include "types.h"
 #include "environnement.h"
-#include "erreur.h"
 #include "interpreteur.h"
 #include "parseur.h"
 #include "couleurs.h"
@@ -22,6 +21,7 @@ int lire_fichier(char* nom_fichier) {
     int res;
     char BUFFER_READ[TAILLE_BUFFER];
     int POSITION = 0;
+    
     if (fichier == NULL) {
         return 1;
     }

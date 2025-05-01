@@ -12,8 +12,8 @@ bool integer_p(sexpr val);
 valisp_integer_t get_integer(sexpr val);
 
 char* chaine_vers_memoire(const char *c);
-sexpr new_string(char * c);
-sexpr new_symbol(char * c);
+sexpr new_string(char *c);
+sexpr new_symbol(char *c);
 char* get_symbol(sexpr val);
 char* get_string(sexpr val);
 bool string_p(sexpr val);
@@ -32,8 +32,8 @@ void afficher_liste(sexpr e);
 
 sexpr new_primitive(sexpr (*p)(sexpr, sexpr));
 sexpr new_speciale(sexpr (*p)(sexpr, sexpr));
-bool prim_p (sexpr val);
-bool spec_p (sexpr val);
+bool prim_p(sexpr val);
+bool spec_p(sexpr val);
 sexpr run_prim(sexpr p, sexpr liste, sexpr env);
 
 void afficher(sexpr val);

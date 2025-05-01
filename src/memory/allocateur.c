@@ -27,37 +27,30 @@ void initialiser_memoire_dynamique() {
     MEMOIRE_DYNAMIQUE[dernier_index] = cons_bloc(0, 0, 1, dernier_index);
 }
 
-/* Extraction des 31 bits de l'indice suivant (bits 0-30) */
 int bloc_suivant(int i) {
     return MEMOIRE_DYNAMIQUE[i] & 0x7FFFFFFF;
 }
 
-/* Extraction des 31 bits de l'indice précédent (bits 32-62) */
 int bloc_precedant(int i) {
     return (MEMOIRE_DYNAMIQUE[i] >> 32) & 0x7FFFFFFF;
 }
 
-/* Extraction du bit d'usage (bit 31) */
 int usage_bloc(int i) {
     return (MEMOIRE_DYNAMIQUE[i] >> 31) & 1;
 }
 
-/* Extraction du bit de ramasse-miettes (bit 63) */
 int rm_bloc(int i) {
     return (MEMOIRE_DYNAMIQUE[i] >> 63) & 1;
 }
 
-/* Activation du bit d'usage (bit 31) */
 void set_use(int i) {
     MEMOIRE_DYNAMIQUE[i] = MEMOIRE_DYNAMIQUE[i] | ((uint64_t)1 << 31);
 }
 
-/* Désactivation du bit d'usage (bit 31) */
 void set_free(int i) {
     MEMOIRE_DYNAMIQUE[i] = MEMOIRE_DYNAMIQUE[i] & ~((uint64_t)1 << 31);
 }
 
-/* Mise à jour de l'indice précédent (bits 32-62) */
 void set_precedent(int a, int b) {
     int rm = rm_bloc(a);
     int libre = usage_bloc(a);
@@ -65,7 +58,6 @@ void set_precedent(int a, int b) {
     MEMOIRE_DYNAMIQUE[a] = cons_bloc(rm, b, libre, suivant);
 }
 
-/* Mise à jour de l'indice suivant (bits 0-30) */
 void set_successeur(int a, int b) {
     int rm = rm_bloc(a);
     int precedent = bloc_precedant(a);
@@ -95,7 +87,6 @@ int rechercher_bloc_libre(size_t size) {
 int pointeur_vers_indice(void *ptr) {
     int i = ((bloc *)ptr) - MEMOIRE_DYNAMIQUE;
     
-    /* Vérification si le pointeur est dans les limites valides */
     if (i <= 0 || i >= TAILLE_MEMOIRE_DYNAMIQUE) {
         ERREUR_FATALE("pointeur_vers_indice: pointeur invalide");
     }
@@ -139,14 +130,12 @@ void *allocateur_malloc(size_t size) {
     return &MEMOIRE_DYNAMIQUE[i + 1];
 }
 
-/* Fonction adaptée pour les blocs 64 bits */
 int ramasse_miette_lire_marque(void * ptr) {
     int i = pointeur_vers_indice(ptr);
     bloc *bloc_ptr = &MEMOIRE_DYNAMIQUE[i];
     return (*bloc_ptr >> 63) & 1;  /* Bit 63 pour le ramasse-miettes */
 }
 
-/* Fonction adaptée pour les blocs 64 bits */
 void ramasse_miette_poser_marque(void * ptr) {
     int i = pointeur_vers_indice(ptr);
     bloc *bloc_ptr = &MEMOIRE_DYNAMIQUE[i];

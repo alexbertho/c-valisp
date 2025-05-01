@@ -5,7 +5,6 @@
 #include "couleurs.h"
 #include "erreur.h"
 
-
 /**********************/
 /*                    */
 /*  Erreurs Fatales   */
@@ -16,10 +15,9 @@
    jamais arriver. Normalement, si le programme est écrit sans bugs,
    les erreurs fatales ne devrait jamais être rencontrées. */
 
-
 enum erreurs TYPE_ERREUR;
-char * MESSAGE_ERREUR;
-char * FONCTION_ERREUR;
+char *MESSAGE_ERREUR;
+char *FONCTION_ERREUR;
 sexpr SEXPR_ERREUR;
 jmp_buf buf;
 
@@ -27,7 +25,7 @@ jmp_buf *jump_buffer() {
     return &buf;
 }
 
-const char* get_nom_erreur(enum erreurs type) {
+const char *get_nom_erreur(enum erreurs type) {
     switch(type) {
         case TYPAGE: return "TYPAGE";
         case ARITE: return "ARITE";
@@ -56,10 +54,7 @@ void erreur(enum erreurs type, char* fonction, char * explication, sexpr s) {
     MESSAGE_ERREUR = explication;
     FONCTION_ERREUR = fonction;
     SEXPR_ERREUR = s;
-    /* On enlève l'affichage de l'erreur qui sera fait dans le REPL */
-    /* afficher_erreur(); */
-    
-    /* On utilise longjmp avec buf (sans &) */
+
     longjmp(buf, 1);
 }
 

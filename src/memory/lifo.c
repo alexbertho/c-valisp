@@ -4,7 +4,6 @@
 #include "erreur.h"
 #include "lifo.h"
 
-
 sexpr PILE[TAILLE_PILE];  
 int HAUT = 0;             
 
