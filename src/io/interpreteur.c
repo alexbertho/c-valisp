@@ -52,6 +52,16 @@ sexpr apply(sexpr fonction, sexpr liste, sexpr env) {
     sexpr result;
     sexpr nouvel_env;
     sexpr expansion;
+
+    printf("apply: fonction = ");
+    afficher(fonction);
+    printf("\n");
+    printf("apply: liste = ");
+    afficher(liste);
+    printf("\n");
+    printf("apply: env = ");
+    afficher(env);
+    printf("\n");
     
     eval_fonction = eval(fonction, env);
     

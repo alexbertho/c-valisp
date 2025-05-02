@@ -76,6 +76,7 @@ int trouver_variable(sexpr env, sexpr variable, sexpr *resultat) {
 
 int modifier_variable(sexpr env, sexpr variable, sexpr valeur) {
     sexpr liste, a, nom;
+
     for (liste=env; liste!=NULL ; liste=cdr(liste)) {
         a = car(liste); /* a est de la forme (nom . valeur) */
         nom = car(a);
@@ -85,6 +86,7 @@ int modifier_variable(sexpr env, sexpr variable, sexpr valeur) {
             return 0;
         }
     }
+    
     return -1;
 }
 
@@ -96,17 +98,20 @@ void definir_variable_globale(sexpr variable, sexpr valeur) {
         modifier_variable(env, variable, valeur);
         return;
     }
+
     ajouter_a_la_fin(env, variable, valeur);
 }
 
 void charger_une_primitive(char *nom, sexpr (*prim)(sexpr, sexpr)) {
     sexpr variable = new_symbol(nom);
     sexpr primitive = new_primitive(prim);
+    
     definir_variable_globale(variable, primitive);
 }
 
 void charger_une_speciale(char *nom, sexpr (*prim)(sexpr, sexpr)) {
     sexpr variable = new_symbol(nom);
     sexpr speciale = new_speciale(prim);
+
     definir_variable_globale(variable, speciale);
 }

@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -Wall -ansi -pedantic -Iinclude
+CFLAGS = -Wall -ansi -g -pedantic -Iinclude
 SRC_DIRS = src/memory src/types src/primitives src/utils src/env src/io
 TEST_DIRS = test/memory test/types test/primitives test/utils
 BUILD_DIRS = $(patsubst src/%,build/%,$(SRC_DIRS)) build/test

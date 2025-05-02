@@ -55,6 +55,7 @@ void set_precedent(int a, int b) {
     int rm = rm_bloc(a);
     int libre = usage_bloc(a);
     int suivant = bloc_suivant(a);
+
     MEMOIRE_DYNAMIQUE[a] = cons_bloc(rm, b, libre, suivant);
 }
 
@@ -62,17 +63,20 @@ void set_successeur(int a, int b) {
     int rm = rm_bloc(a);
     int precedent = bloc_precedant(a);
     int libre = usage_bloc(a);
+
     MEMOIRE_DYNAMIQUE[a] = cons_bloc(rm, precedent, libre, b);
 }
 
 int taille_bloc(int i) {
     int suivant = bloc_suivant(i);
+
     if(suivant==i){return 0;} /* S'il pointe sur lui meme */
     return suivant - i - 1;
 }
 
 int rechercher_bloc_libre(size_t size) {
     int i, n;
+
     for(i=0; bloc_suivant(i) != i; i = bloc_suivant(i)){
         if (!usage_bloc(i)) {
             n = taille_bloc(i);
@@ -81,6 +85,7 @@ int rechercher_bloc_libre(size_t size) {
             }
         }
     }
+
     return -1;
 }
 
@@ -97,8 +102,8 @@ int pointeur_vers_indice(void *ptr) {
 void *allocateur_malloc(size_t size) {
     int taille_dispo, suivant_original, nouveau_bloc;
     int nb_cases_necessaires = (size + TAILLE_BLOC_OCTETS - 1) / TAILLE_BLOC_OCTETS;
-    
     int i = rechercher_bloc_libre(size);
+
     if (i == -1) {
         /* Pas de bloc libre trouvé */
         return NULL;
@@ -130,22 +135,32 @@ void *allocateur_malloc(size_t size) {
     return &MEMOIRE_DYNAMIQUE[i + 1];
 }
 
-int ramasse_miette_lire_marque(void * ptr) {
+/* 
+ * valeur de retour :
+    1 : Le bloc est marqué, il sera sauvé
+    0 : Le bloc n'est pas marqué, il sera libéré (free/suprimmé)
+ */
+int ramasse_miette_lire_marque(void *ptr) {
     int i = pointeur_vers_indice(ptr);
-    bloc *bloc_ptr = &MEMOIRE_DYNAMIQUE[i];
-    return (*bloc_ptr >> 63) & 1;  /* Bit 63 pour le ramasse-miettes */
+    
+    return rm_bloc(i);
 }
 
-void ramasse_miette_poser_marque(void * ptr) {
+void ramasse_miette_poser_marque(void *ptr) {
     int i = pointeur_vers_indice(ptr);
     bloc *bloc_ptr = &MEMOIRE_DYNAMIQUE[i];
 
     if(ramasse_miette_lire_marque(ptr)) {
         ERREUR_FATALE("LE BLOC EST DEJA MARQUE");
     }
+
     *bloc_ptr |= ((uint64_t)1 << 63);  /* Activation du bit 63 */
 }
 
+/* valeur de retour:
+ * 1 : Le bloc est marqué donc il sera libre (supprimé)
+ * 0 : Le bloc n'est pas marqué, il sera conservé
+ */
 int bloc_libre(int i) {
     if (i == bloc_suivant(i)) {return 0;} /*Le dernier bloc ne doit pas être supprimé*/
     return !rm_bloc(i); 
@@ -176,7 +191,7 @@ void ramasse_miette_liberer() {
     int i = 0;
     
     while (bloc_suivant(i) != i) {
-        if (!bloc_libre(i)) { /* Bloc à supprimer */
+        if (bloc_libre(i)) { /* Bloc à supprimer */
             i = free_fusion(i);  
         } else {
             i = bloc_suivant(i);
