@@ -195,7 +195,8 @@ void ramasse_miette_liberer() {
     int i = 0;
     
     while (bloc_suivant(i) != i) {
-        if (bloc_libre(i)) { /* Bloc à supprimer */
+        if (usage_bloc(i) && !rm_bloc(i)) {
+            set_free(i);  /* Marquer comme libre */
             i = free_fusion(i);  
         } else {
             i = bloc_suivant(i);
