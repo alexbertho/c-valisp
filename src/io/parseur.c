@@ -44,8 +44,7 @@ int longueur_chaine(char *texte, int deb, int fin) {
 char *sous_chaine(char *texte, int deb, int fin) {
     int i, j = 0;
     int len = longueur_chaine(texte, deb, fin);
-    char *result = (char *)malloc(len + 1);
-    printf("sous_chaine (avant) : %s\n", result);
+    char *result = (char *)valisp_malloc(len + 1);
     
     for (i = deb; i < fin; i++) {
         if (texte[i] == '\\' && i + 1 < fin) {
@@ -62,7 +61,6 @@ char *sous_chaine(char *texte, int deb, int fin) {
     }
     
     result[j] = '\0'; 
-    printf("sous_chaine (après) : %s\n", result);
     return result;
 }
 

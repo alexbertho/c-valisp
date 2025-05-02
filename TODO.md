@@ -9,6 +9,7 @@
 - [ ] Reecrire les tests pour les adapter aux nouvelles implementations
 
 ## Correctifs intermédiaires
+- [ ] Verifier les possibles fuites mémoire dans dans la fonction parseur.c:sous_chaine(...)
 - [ ] Corriger la gestion de la mémoire dans l'allocateur
 - [ ] Résoudre les potentielles fuites mémoire dans `allocateur_free()`
 - [ ] Améliorer la gestion des erreurs dans le parseur

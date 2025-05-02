@@ -157,34 +157,38 @@ void ramasse_miette_poser_marque(void *ptr) {
     *bloc_ptr |= ((uint64_t)1 << 63);  /* Activation du bit 63 */
 }
 
-/* valeur de retour:
- * 1 : Le bloc est marqué donc il sera libre (supprimé)
- * 0 : Le bloc n'est pas marqué, il sera conservé
- */
 int bloc_libre(int i) {
-    if (i == bloc_suivant(i)) {return 0;} /*Le dernier bloc ne doit pas être supprimé*/
-    return !rm_bloc(i); 
+    if (i == bloc_suivant(i)) return 0;
+    return !usage_bloc(i) && !rm_bloc(i); 
 }
 
 int free_fusion(int i) {
-    /*
-    j : le premier bloc libre avant i
-    k : le premier bloc libre après i
-    i : le bloc à libérer
-    */
     int j, k;
-
-    /*Trouver le premier bloc libre en remontant la chaîne*/
-    /*j != bloc_precedant(j) -> pour eviter une boucle infinie*/
-    for(j=i; j != bloc_precedant(j) && usage_bloc(bloc_precedant(j)) != 1; j=bloc_precedant(j));
-    /*Trouver le premier bloc utilisé après la chaîne de blocs libres*/
-    for(k=bloc_suivant(i); k != bloc_suivant(k) && usage_bloc(k) != 1; k=bloc_suivant(k));
-
+    
+    for (j = i; j != bloc_precedant(j); j = bloc_precedant(j)) {
+        if (usage_bloc(bloc_precedant(j))) break;
+    }
+    
+    for (k = bloc_suivant(i); k != bloc_suivant(k); k = bloc_suivant(k)) {
+        if (usage_bloc(k)) break;
+    }
+    
     set_free(j);
     set_successeur(j, k);
     set_precedent(k, j);
     
     return k;
+}
+
+void reinitialiser_marques() {
+    int i = 0;
+    
+    while (i != bloc_suivant(i)) {
+        MEMOIRE_DYNAMIQUE[i] &= ~((uint64_t)1 << 63);
+        i = bloc_suivant(i);
+    }
+
+    MEMOIRE_DYNAMIQUE[i] &= ~((uint64_t)1 << 63);
 }
 
 void ramasse_miette_liberer() {
@@ -206,6 +210,7 @@ void allocateur_free_bloc(int i) {
 void allocateur_free(void *ptr) {
     int bloc_indice = (bloc *) ptr - MEMOIRE_DYNAMIQUE;
     int i;
+    
     /*Maintenant on doit trouvé le bloc courrespondant c'est ne pas forcemment i-1*/
     for(i=0; bloc_indice <= bloc_suivant(i); i=bloc_suivant(i));
     allocateur_free_bloc(i);
