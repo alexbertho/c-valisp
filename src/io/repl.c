@@ -52,7 +52,8 @@ int repl() {
     sexpr val;
     int res;
     jmp_buf *buf = jump_buffer();
-/*  sexpr envg = environnement_global();*/
+    sexpr envg = environnement_global();
+
     using_history();
 
     while (1) { /* REPL */
@@ -61,9 +62,9 @@ int repl() {
         if (ligne == NULL) break;
         if (ligne[0] == '\0')  continue ;
         if (strcmp(ligne, "@env") == 0) { repl_env() ; continue; }
-        if (strcmp(ligne, "@mem") == 0) { valisp_stat_memoire(); printf("\n\n"); continue;}
+        if (strcmp(ligne, "@mem") == 0) { valisp_stat_memoire(); continue;}
         if (strcmp(ligne, "@mmem")== 0) { afficher_memoire(); continue;}
-        if (strcmp(ligne, "@rm")== 0) { ramasse_miette_liberer(); continue;}
+        if (strcmp(ligne, "@rm")== 0) { valisp_ramasse_miettes(envg); continue;}
         if (strcmp(ligne, "@exit") == 0) { free(ligne); break; }
         {
         /* code */
