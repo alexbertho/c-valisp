@@ -16,7 +16,7 @@
 #include "erreur.h"
 #include "couleurs.h"
 
-#define TAILLE_BUFFER  10000
+#define TAILLE_BUFFER 10000
 
 void afficher_banniere() {
     printf("VAΛISP V.0.0.1\n\n");
@@ -61,15 +61,13 @@ int repl() {
 
         if (ligne == NULL) break;
         if (ligne[0] == '\0')  continue ;
-        if (strcmp(ligne, "@env") == 0) { repl_env() ; continue; }
+        if (strcmp(ligne, "@env") == 0) { repl_env() ; continue;}
         if (strcmp(ligne, "@mem") == 0) { valisp_stat_memoire(); continue;}
         if (strcmp(ligne, "@mmem")== 0) { afficher_memoire(); continue;}
         if (strcmp(ligne, "@rm")== 0) { valisp_ramasse_miettes(envg); continue;}
+        /* Alloue un bloc pour tester la memoire et/ou le GC */
+        if (strcmp(ligne, "@vm")== 0) { valisp_malloc(sizeof(char)*4); continue;}
         if (strcmp(ligne, "@exit") == 0) { free(ligne); break; }
-        {
-        /* code */
-        }
-
 
         if (!setjmp(*buf)) {
 
@@ -102,11 +100,9 @@ int repl() {
                 printf("Pas plus d’une sexpr par ligne\n\n");
                 printf("%s", couleur_defaut);
                 continue;
-            }
-
+            } 
 
             /* On a réussi à lire l’expression, on peut l’évaluer */
-
 
             /* Tout ce que valisp affichera sera en bleu*/
             printf("%s", couleur_bleu);
@@ -117,9 +113,8 @@ int repl() {
             printf("%s", couleur_vert);
             afficher(val);                         /* PRINT */
             printf("%s", couleur_defaut);
-
-
-            /* valisp_ramasse_miettes(envg); */
+ 
+            valisp_ramasse_miettes(envg);
         } else {
             /* Si on rencontre une « exception » */
             printf("%s", couleur_rouge);

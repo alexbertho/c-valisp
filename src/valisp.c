@@ -8,6 +8,7 @@
 #include "chargeur.h"
 #include "repl.h"
 #include "couleurs.h"
+#include "lifo.h"
 
 /********************************/
 /*                              */
@@ -75,6 +76,8 @@ int init_valisp(load_stdlib, verbose) {
     if (verbose) {
         printf("%s [OK]\n%s", couleur_vert, couleur_defaut);
     }
+
+    init_pile(environnement_global());
 
     if (load_stdlib) {
         printf("Chargement de la blibliothèque standard");
