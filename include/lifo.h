@@ -10,6 +10,6 @@ void init_pile(sexpr env);
 int pile_nouveau_cadre(void);
 void pile_fin_cadre(int i);
 void pile_ajout(sexpr s);
-
+void pile_parcourir(void (*fn)(sexpr));
 
 #endif

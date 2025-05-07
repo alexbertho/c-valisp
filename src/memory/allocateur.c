@@ -5,7 +5,6 @@
 
 #include "allocateur.h"
 #include "erreur.h"
-#include "lifo.h"
 
 
 bloc MEMOIRE_DYNAMIQUE[TAILLE_MEMOIRE_DYNAMIQUE];

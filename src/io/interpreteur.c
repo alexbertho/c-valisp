@@ -5,6 +5,7 @@
 #include "environnement.h"
 #include "erreur.h"
 #include "interpreteur.h"
+#include "lifo.h"
 
 sexpr eval_list(sexpr liste, sexpr env) {
     if (liste == NULL) return NULL;
@@ -49,18 +50,26 @@ sexpr apply(sexpr fonction, sexpr liste, sexpr env) {
     sexpr params;
     sexpr body;
     sexpr args_evalues;
-    sexpr result;
+    sexpr result = NULL;
     sexpr nouvel_env;
     sexpr expansion;
+    int cadre_pile;
+    
+    /* Sauvegarder l'indice du haut de la pile */
+    cadre_pile = pile_nouveau_cadre();
     
     eval_fonction = eval(fonction, env);
+    pile_ajout(eval_fonction); /* Empiler pour protéger contre le GC */
     
     if (spec_p(eval_fonction)) {
-        return run_prim(eval_fonction, liste, env);
+        result = run_prim(eval_fonction, liste, env);
+        goto fin;
     } 
     else if (prim_p(eval_fonction)) {
         args_evalues = eval_list(liste, env);
-        return run_prim(eval_fonction, args_evalues, env);
+        pile_ajout(args_evalues); /* Protéger les arguments évalués */
+        result = run_prim(eval_fonction, args_evalues, env);
+        goto fin;
     }
     else if (cons_p(eval_fonction)) {
         lambda_symbol = car(eval_fonction);
@@ -71,49 +80,54 @@ sexpr apply(sexpr fonction, sexpr liste, sexpr env) {
                 body = cdr(cdr(eval_fonction));
                 
                 args_evalues = eval_list(liste, env);
+                pile_ajout(args_evalues);
                 
                 nouvel_env = bind(params, args_evalues, env);
+                pile_ajout(nouvel_env);
                 
-                result = NULL;
-
-                /* 
-                 * Parcourir séquentiellement toutes les expressions du corps
-                 * Exemple: pour (lambda (x y) (print x) (print y) (+ x y))
-                 * body = ((print x) (print y) (+ x y))
-                 * La boucle traite une à une ces expressions
-                 */
+                /* Parcourir séquentiellement le corps de la fonction */
                 while (body != NULL) {
-                    result = eval(car(body), nouvel_env);
+                    if (result != NULL) {
+                        /* On ne conserve pas les résultats intermédiaires */
+                        result = eval(car(body), nouvel_env);
+                    } else {
+                        result = eval(car(body), nouvel_env);
+                    }
+                    pile_ajout(result);
                     body = cdr(body);
                 }
                 
-                return result;
+                goto fin;
             }
             else if (symbol_match_p(lambda_symbol, "macro")) {
                 params = car(cdr(eval_fonction));
                 body = cdr(cdr(eval_fonction));
                 
                 nouvel_env = bind(params, liste, env);
+                pile_ajout(nouvel_env);
                 
                 expansion = NULL;
                 while (body != NULL) {
                     expansion = eval(car(body), nouvel_env);
+                    pile_ajout(expansion);
                     body = cdr(body);
                 }
-                /* 
-                 * Étape supplémentaire pour les macros:
-                 * Évaluer l'expansion dans l'environnement original
-                 * 
-                 * Exemple: si expansion = (if (> x 0) (progn (print "x est positif") (* x 2)) nil)
-                 * on évalue cette forme pour obtenir le résultat final
-                 */
-                return eval(expansion, env);
+                
+                /* Évaluer l'expansion dans l'environnement original */
+                result = eval(expansion, env);
+                goto fin;
             }
         }
     }
+    
     erreur(TYPAGE, "apply", "Ne peut pas appliquer cette expression comme une fonction", eval_fonction);
-    return NULL;
+    
+fin:
+    /* Restaurer la pile à son état initial */
+    pile_fin_cadre(cadre_pile);
+    return result;
 }
+
 
 sexpr eval(sexpr val, sexpr env) {
     sexpr res;

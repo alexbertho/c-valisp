@@ -29,3 +29,12 @@ void pile_ajout(sexpr s) {
     }
     PILE[HAUT++] = s;
 }
+
+void pile_parcourir(void (*fn)(sexpr)) {
+    int i;
+    for (i = 0; i < HAUT; i++) {
+        if (PILE[i] != NULL) {
+            fn(PILE[i]);
+        }
+    }
+}
