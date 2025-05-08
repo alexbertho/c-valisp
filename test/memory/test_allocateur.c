@@ -1,6 +1,7 @@
+#include <stdio.h>
+#include <stdint.h>
+
 #include "tests.h"
-#include "stdio.h"
-#include "stdint.h"
 #include "allocateur.h"
 #include "couleurs.h"
 #include "tests.h"

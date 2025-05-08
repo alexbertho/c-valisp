@@ -21,7 +21,7 @@ void test_parse_entier() {
     
     b = RUN_TEST(integer_p(result)) && b;
     b = RUN_TEST(get_integer(result) == 42) && b;
-    b = RUN_TEST(i == 2) && b;
+    b = RUN_TEST(i == 2) && b;  /* Test position after parsing */
     
     ok_test(b);
     
@@ -32,7 +32,7 @@ void test_parse_entier() {
     
     b = RUN_TEST(integer_p(result)) && b;
     b = RUN_TEST(get_integer(result) == -123) && b;
-    b = RUN_TEST(i == 4) && b;
+    b = RUN_TEST(i == 4) && b;  /* Test position after parsing */
     
     ok_test(b);
     
@@ -43,6 +43,7 @@ void test_parse_entier() {
     
     b = RUN_TEST(symbol_p(result)) && b;
     b = RUN_TEST(strcmp(get_symbol(result), "42abc") == 0) && b;
+    b = RUN_TEST(i == 5) && b;  /* Test position after parsing entire symbol */
     
     ok_test(b);
 }
@@ -62,7 +63,7 @@ void test_parse_symbole() {
     
     b = RUN_TEST(symbol_p(result)) && b;
     b = RUN_TEST(strcmp(get_symbol(result), "test") == 0) && b;
-    b = RUN_TEST(i == 4) && b;
+    b = RUN_TEST(i == 4) && b;  /* Test position after parsing */
     
     ok_test(b);
     
@@ -72,7 +73,7 @@ void test_parse_symbole() {
     printf("  ");
     
     b = RUN_TEST(result == NULL) && b;
-    b = RUN_TEST(i == 3) && b;
+    b = RUN_TEST(i == 3) && b;  /* Test position after parsing */
     
     ok_test(b);
     
@@ -83,7 +84,7 @@ void test_parse_symbole() {
     
     b = RUN_TEST(symbol_p(result)) && b;
     b = RUN_TEST(strcmp(get_symbol(result), "+") == 0) && b;
-    b = RUN_TEST(i == 1) && b;
+    b = RUN_TEST(i == 1) && b;  /* Test position after parsing */
     
     ok_test(b);
     
@@ -94,7 +95,7 @@ void test_parse_symbole() {
     
     b = RUN_TEST(symbol_p(result)) && b;
     b = RUN_TEST(strcmp(get_symbol(result), "t") == 0) && b;
-    b = RUN_TEST(i == 1) && b;
+    b = RUN_TEST(i == 1) && b;  /* Test position after parsing */
     
     ok_test(b);
 }
@@ -114,7 +115,7 @@ void test_parse_chaine() {
     
     b = RUN_TEST(string_p(result)) && b;
     b = RUN_TEST(strcmp(get_string(result), "hello") == 0) && b;
-    b = RUN_TEST(i == 7) && b;
+    b = RUN_TEST(i == 7) && b;  /* Test position after parsing */
     
     ok_test(b);
     
@@ -125,6 +126,7 @@ void test_parse_chaine() {
     
     b = RUN_TEST(string_p(result)) && b;
     b = RUN_TEST(strcmp(get_string(result), "test\"escape") == 0) && b;
+    b = RUN_TEST(i == 14) && b;  /* Test position after parsing */
     
     ok_test(b);
     
@@ -135,6 +137,7 @@ void test_parse_chaine() {
     
     b = RUN_TEST(string_p(result)) && b;
     b = RUN_TEST(strcmp(get_string(result), "hello\nworld") == 0) && b;
+    b = RUN_TEST(i == 14) && b;  /* Test position after parsing */
     
     ok_test(b);
 }
@@ -153,7 +156,7 @@ void test_parse_liste() {
     printf("  ");
     
     b = RUN_TEST(result == NULL) && b;
-    b = RUN_TEST(i == 2) && b;
+    b = RUN_TEST(i == 2) && b;  /* Test position after parsing */
     
     ok_test(b);
     
@@ -172,6 +175,7 @@ void test_parse_liste() {
     b = RUN_TEST(integer_p(car(cdr(cdr(result))))) && b;
     b = RUN_TEST(get_integer(car(cdr(cdr(result)))) == 3) && b;
     b = RUN_TEST(cdr(cdr(cdr(result))) == NULL) && b;
+    b = RUN_TEST(i == 7) && b;  /* Test position after parsing */
     
     ok_test(b);
     
@@ -187,6 +191,7 @@ void test_parse_liste() {
     b = RUN_TEST(strcmp(get_symbol(car(cdr(result))), "b") == 0) && b;
     b = RUN_TEST(symbol_p(car(cdr(cdr(result))))) && b;
     b = RUN_TEST(strcmp(get_symbol(car(cdr(cdr(result)))), "c") == 0) && b;
+    b = RUN_TEST(i == 7) && b;  /* Test position after parsing */
     
     ok_test(b);
     
@@ -202,6 +207,7 @@ void test_parse_liste() {
     b = RUN_TEST(get_integer(car(cdr(result))) == 1) && b;
     b = RUN_TEST(integer_p(car(cdr(cdr(result))))) && b;
     b = RUN_TEST(get_integer(car(cdr(cdr(result)))) == 2) && b;
+    b = RUN_TEST(i == 7) && b;  /* Test position after parsing */
     
     ok_test(b);
 }
@@ -224,6 +230,7 @@ void test_parse_quote() {
     b = RUN_TEST(strcmp(get_symbol(car(result)), "quote") == 0) && b;
     b = RUN_TEST(integer_p(car(cdr(result)))) && b;
     b = RUN_TEST(get_integer(car(cdr(result))) == 42) && b;
+    b = RUN_TEST(i == 3) && b;  /* Test position after parsing */
     
     ok_test(b);
     
@@ -236,6 +243,7 @@ void test_parse_quote() {
     b = RUN_TEST(symbol_p(car(result))) && b;
     b = RUN_TEST(strcmp(get_symbol(car(result)), "quote") == 0) && b;
     b = RUN_TEST(cons_p(car(cdr(result)))) && b;
+    b = RUN_TEST(i == 8) && b;  /* Test position after parsing */
     
     ok_test(b);
     
@@ -249,6 +257,7 @@ void test_parse_quote() {
     b = RUN_TEST(strcmp(get_symbol(car(result)), "quote") == 0) && b;
     b = RUN_TEST(symbol_p(car(cdr(result)))) && b;
     b = RUN_TEST(strcmp(get_symbol(car(cdr(result))), "abc") == 0) && b;
+    b = RUN_TEST(i == 4) && b;  /* Test position after parsing */
     
     ok_test(b);
 }
@@ -301,6 +310,7 @@ void test_parse_complexe() {
     b = RUN_TEST(cons_p(result)) && b;
     b = RUN_TEST(symbol_p(car(result))) && b;
     b = RUN_TEST(strcmp(get_symbol(car(result)), "defun") == 0) && b;
+    b = RUN_TEST(i == 49) && b;  /* Test position after parsing */
     
     ok_test(b);
     
@@ -317,6 +327,7 @@ void test_parse_complexe() {
     b = RUN_TEST(integer_p(car(cdr(cdr(result))))) && b;
     b = RUN_TEST(get_integer(car(cdr(cdr(result)))) == 2) && b;
     b = RUN_TEST(cons_p(car(cdr(cdr(cdr(result)))))) && b;
+    b = RUN_TEST(i == 15) && b;  /* Test position after parsing */
     
     ok_test(b);
     
@@ -328,6 +339,7 @@ void test_parse_complexe() {
     b = RUN_TEST(cons_p(result)) && b;
     b = RUN_TEST(symbol_p(car(result))) && b;
     b = RUN_TEST(strcmp(get_symbol(car(result)), "let") == 0) && b;
+    b = RUN_TEST(i == 28) && b;  /* Test position after parsing */
     
     ok_test(b);
 }
@@ -342,22 +354,22 @@ void test_parse_erreurs() {
     
     i = parseur(")", 0, &result);
     printf("parseur \")\" = %d  ", i);
-    b = RUN_TEST(i == -4) && b;
+    b = RUN_TEST(i == -4) && b;  /* Unexpected closing parenthesis */
     ok_test(b);
     
     i = parseur("(", 0, &result);
     printf("parseur \"(\" = %d  ", i);
-    b = RUN_TEST(i == -2) && b;
+    b = RUN_TEST(i == -2) && b;  /* Incomplete input (unclosed list) */
     ok_test(b);
     
     i = parseur("\"test", 0, &result);
     printf("parseur \"\\\"test\" = %d  ", i);
-    b = RUN_TEST(i == -2) && b;
+    b = RUN_TEST(i == -2) && b;  /* Incomplete input (unclosed string) */
     ok_test(b);
     
     i = parseur("", 0, &result);
     printf("parseur \"\" = %d  ", i);
-    b = RUN_TEST(i == -1) && b;
+    b = RUN_TEST(i == -1) && b;  /* Empty input */
     ok_test(b);
 }
 
