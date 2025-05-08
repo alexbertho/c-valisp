@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
 #include "valisp_numeric.h"
 #include "erreur.h"
 #include "memoire.h"
@@ -133,4 +134,53 @@ char *int_to_str(valisp_integer_t num) {
  */
 char *valisp_to_string(valisp_integer_t num) {
     return int_to_str(num);
+}
+
+/*******************************************************************************
+ * ATTENTION: Cette fonction alloue de la mémoire avec malloc!
+ * L'appelant est responsable de libérer cette mémoire avec free()
+ * après utilisation pour éviter les fuites de mémoire.
+ *******************************************************************************
+ */
+char *valisp_ratio_to_string(valisp_integer_t num, valisp_integer_t denom) {
+    char *num_str, *denom_str;
+    char *result;
+    size_t len_num, len_denom, len_total;
+    
+    /* Gérer le cas où le dénominateur est 1 */
+    if (denom == 1) {
+        return int_to_str(num);
+    }
+    
+    /* Gérer le cas où le numérateur est 0 */
+    if (num == 0) {
+        result = (char*)malloc(2);
+        result[0] = '0';
+        result[1] = '\0';
+        return result;
+    }
+    
+    /* Appliquer le signe au numérateur si le dénominateur est négatif */
+    if (denom < 0) {
+        num = -num;
+        denom = -denom;
+    }
+    
+    num_str = int_to_str(num);
+    denom_str = int_to_str(denom);
+    
+    len_num = strlen(num_str);
+    len_denom = strlen(denom_str);
+    len_total = len_num + len_denom + 2; /* +2 pour '/' et '\0' */
+    
+    result = (char*)malloc(len_total);
+    
+    strcpy(result, num_str);
+    strcat(result, "/");
+    strcat(result, denom_str);
+    
+    free(num_str);
+    free(denom_str);
+    
+    return result;
 }

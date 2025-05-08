@@ -4,6 +4,7 @@
 
 #include "types.h"
 #include "primitives.h"
+#include "prim_ratio.h"
 #include "environnement.h"
 #include "chargeur.h"
 #include "repl.h"
@@ -33,6 +34,10 @@ void charger_primitives() {
     charger_une_primitive("print",    print_valisp);
     charger_une_primitive("println",  println_valisp);
     charger_une_primitive("type-of",  type_of_valisp);
+
+    charger_une_primitive("ratio",       ratio_valisp);
+    charger_une_primitive("numerator",   numerator_valisp);
+    charger_une_primitive("denominator", denominator_valisp);
 
     charger_une_speciale("defvar",  defvar_valisp);
     charger_une_speciale("setq",    setq_valisp);

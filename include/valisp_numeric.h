@@ -22,5 +22,6 @@ int valisp_gt(valisp_integer_t a, valisp_integer_t b);
 
 valisp_integer_t valisp_from_string(const char *str);
 char* valisp_to_string(valisp_integer_t num);
+char *valisp_ratio_to_string(valisp_integer_t num, valisp_integer_t denom);
 
 #endif 
