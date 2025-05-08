@@ -8,8 +8,9 @@
 #include "erreur.h"
 
 typedef enum {
-    entier, 
-    chaine, 
+    entier,
+    ratio, 
+    chaine,
     symbole, 
     couple, 
     prim, 
@@ -17,12 +18,18 @@ typedef enum {
 } valisp_types;
 
 typedef struct {
+    valisp_integer_t numerateur;
+    valisp_integer_t denominateur;
+} valisp_ratio;
+
+typedef struct {
     sexpr car;
     sexpr cdr;
 } valisp_cons;
 
 typedef union {
-    valisp_integer_t INTEGER;  /* Utilisation du type abstrait */
+    valisp_integer_t INTEGER;
+    valisp_ratio RATIO;
     char *STRING;
     valisp_cons CONS;
     sexpr (*PRIMITIVE) (sexpr, sexpr);
@@ -55,6 +62,97 @@ valisp_integer_t get_integer(sexpr val) {
         ERREUR_FATALE("get_integer: l'argument n'est pas un entier");
     }
     return val->data.INTEGER;
+}
+
+/* ==============*/
+/* PARTIE RATIOS */
+/* ==============*/
+
+static valisp_integer_t gcd(valisp_integer_t a, valisp_integer_t b) {
+    valisp_integer_t temp;
+    
+    a = a < 0 ? -a : a;
+    b = b < 0 ? -b : b;
+    
+    while (b != 0) {
+        temp = b;
+        b = a % b;
+        a = temp;
+    }
+    
+    return a;
+}
+
+static int simplify_ratio(valisp_integer_t numerateur, valisp_integer_t denominateur,
+                          valisp_integer_t *num_result, valisp_integer_t *denom_result) {
+    valisp_integer_t diviseur_commun;
+    
+    if (denominateur == 0) {
+        return -1;
+    }
+    
+    if (numerateur == 0) {
+        *num_result = 0;
+        *denom_result = 1;
+        return 0;
+    }
+    
+    if (denominateur < 0) {
+        numerateur = -numerateur;
+        denominateur = -denominateur;
+    }
+    
+    /* Calculer le PGCD et simplifier la fraction */
+    diviseur_commun = gcd(numerateur, denominateur);
+    *num_result = numerateur / diviseur_commun;
+    *denom_result = denominateur / diviseur_commun;
+    
+    if (*denom_result == 1) {
+        return 0; 
+    }
+    
+    return 1; 
+}
+
+sexpr new_ratio(valisp_integer_t numerateur, valisp_integer_t denominateur) {
+    sexpr new_rat;
+    valisp_integer_t num_result, denom_result;
+    int type;
+    
+    type = simplify_ratio(numerateur, denominateur, &num_result, &denom_result);
+    
+    if (type == -1) {
+        erreur(DIVISION_PAR_ZERO, "new_ratio", "Dénominateur nul", NULL);
+    }
+    
+    if (type == 0) {
+        return new_integer(num_result);
+    }
+    
+    new_rat = valisp_malloc(sizeof(struct valisp_object));
+    new_rat->type = ratio;
+    new_rat->data.RATIO.numerateur = num_result;
+    new_rat->data.RATIO.denominateur = denom_result;
+    
+    return new_rat;
+}
+
+bool ratio_p(sexpr val) {
+    return (bool) ((val != NULL) && (val->type == ratio));
+}
+
+valisp_integer_t get_numerator(sexpr val) {
+    if (!ratio_p(val)) {
+        ERREUR_FATALE("get_numerator: l'argument n'est pas un ratio");
+    }
+    return val->data.RATIO.numerateur;
+}
+
+valisp_integer_t get_denominator(sexpr val) {
+    if (!ratio_p(val)) {
+        ERREUR_FATALE("get_denominator: l'argument n'est pas un ratio");
+    }
+    return val->data.RATIO.denominateur;
 }
 
 /* ==========================*/
@@ -239,6 +337,15 @@ void afficher(sexpr val) {
             char* num_str = valisp_to_string(get_integer(val));
             printf("%s", num_str);
             free(num_str); 
+            break;
+        }
+        case ratio: {
+            char* ratio_str = valisp_ratio_to_string(
+                get_numerator(val), 
+                get_denominator(val)
+            );
+            printf("%s", ratio_str);
+            free(ratio_str); 
             break;
         }
         case chaine:

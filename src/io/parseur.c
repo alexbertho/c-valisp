@@ -1,9 +1,6 @@
 #include <stddef.h>
 #include <stdlib.h>
 
-/* A sup */
-#include <stdio.h>
-
 #include "parseur.h"
 #include "types.h"
 #include "memoire.h"
@@ -109,18 +106,70 @@ int parse_chaine(char *texte, int i, sexpr *res) {
     return i + 1;
 }
 
+int parse_ratio(char *texte, int start, sexpr *res) {
+    int i = start;
+    int sign = 1;
+    valisp_integer_t numerateur = 0;
+    valisp_integer_t denominateur = 0;
+    
+    if (texte[i] == '-') {
+        sign = -1;
+        i++;
+    } else if (texte[i] == '+') {
+        i++;
+    }
+    
+    while (est_chiffre(texte[i])) {
+        numerateur = numerateur * 10 + (texte[i] - '0');
+        i++;
+    }
+    
+    if (texte[i] != '/') {
+        return -3;
+    }
+    
+    i++;
+    
+    if (!est_chiffre(texte[i])) {
+        return -3;
+    }
+    
+    while (est_chiffre(texte[i])) {
+        denominateur = denominateur * 10 + (texte[i] - '0');
+        i++;
+    }
+    
+    if (!fin_mot(texte[i]) && texte[i] != '\0' && texte[i] != ')') {
+        *res = new_symbol(sous_chaine(texte, start, i));
+        return i;
+    }
+    
+    *res = new_ratio(sign * numerateur, denominateur);
+    
+    return i;
+}
+
 int parse_entier(char *texte, int i, sexpr *res) {
     int sign = 1;
     int value = 0;
     int start = i;
+    int j;
     
     if (texte[i] == '-') {
         sign = -1;
+        i++;
+    } else if (texte[i] == '+') {
         i++;
     }
     
     if (!est_chiffre(texte[i])) {
         return -3; 
+    }
+    
+    for (j = i; texte[j] != '\0' && !fin_mot(texte[j]) && texte[j] != ')'; j++) {
+        if (texte[j] == '/') {
+            return parse_ratio(texte, start, res);
+        }
     }
     
     while (est_chiffre(texte[i])) {

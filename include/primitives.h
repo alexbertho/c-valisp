@@ -5,7 +5,6 @@
 
 void test_nb_parametres(sexpr liste, char* fonction, int taille);
 
-/* Primitives de base */
 sexpr car_valisp(sexpr liste, sexpr env);
 sexpr cdr_valisp(sexpr liste, sexpr env);
 sexpr cons_valisp(sexpr liste, sexpr env);

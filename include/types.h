@@ -11,6 +11,11 @@ sexpr new_integer(valisp_integer_t i);
 bool integer_p(sexpr val);
 valisp_integer_t get_integer(sexpr val);
 
+sexpr new_ratio(valisp_integer_t numerateur, valisp_integer_t denominateur);
+bool ratio_p(sexpr val);
+valisp_integer_t get_numerator(sexpr val);
+valisp_integer_t get_denominator(sexpr val);
+
 char* chaine_vers_memoire(const char *c);
 sexpr new_string(char *c);
 sexpr new_symbol(char *c);

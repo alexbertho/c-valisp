@@ -50,3 +50,8 @@ void *valisp_malloc(size_t size) {
     
     return ptr;
 }
+
+void valisp_free(void *ptr) {
+    if (ptr == NULL) return;
+    allocateur_free(ptr);
+}

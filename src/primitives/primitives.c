@@ -6,6 +6,8 @@
 #include "primitives.h"
 #include "environnement.h"
 #include "interpreteur.h"
+#include "valisp_numeric.h"
+#include "prim_ratio.h"
 
 void test_nb_parametres(sexpr liste, char *fonction, int taille) {
     int compteur = 0;
@@ -60,105 +62,146 @@ sexpr cons_valisp(sexpr liste, sexpr env) {
 sexpr add_valisp(sexpr liste, sexpr env) {
     sexpr a;
     sexpr courant = liste;
-    valisp_integer_t somme = 0;
-
+    sexpr resultat = NULL;
+    
     if (liste == NULL) return new_integer(0);
-
-    while (courant != NULL){
+    
+    a = car(courant);
+    if (!integer_p(a) && !ratio_p(a)) {
+        erreur(TYPAGE, "+", "nécessite un nombre (entier ou ratio)", a);
+    }
+    resultat = a;
+    courant = cdr(courant);
+    
+    while (courant != NULL) {
         a = car(courant);
-
-        if (!integer_p(a)) erreur(TYPAGE, "+", "nécessite un entier", a);
-
-        somme = valisp_add(somme, get_integer(a));
+        
+        if (!integer_p(a) && !ratio_p(a)) {
+            erreur(TYPAGE, "+", "nécessite un nombre (entier ou ratio)", a);
+        }
+        
+        resultat = add_ratio(resultat, a);
+        
         courant = cdr(courant);
     }
-
-    return new_integer(somme);
+    
+    return resultat;
 } 
 
 sexpr sub_valisp(sexpr liste, sexpr env) {
     sexpr a;
     sexpr courant = liste;
-    valisp_integer_t diff;
-
+    sexpr resultat = NULL;
+    
     if (liste == NULL) return new_integer(0);
-
+    
     a = car(courant);
-
-    if (!integer_p(a)) erreur(TYPAGE, "-", "nécessite un entier", a);
-
-    diff = get_integer(a);
+    if (!integer_p(a) && !ratio_p(a)) {
+        erreur(TYPAGE, "-", "nécessite un nombre (entier ou ratio)", a);
+    }
+    resultat = a;
     courant = cdr(courant);
-
-    if (courant == NULL) return new_integer(valisp_sub(0, diff)); /* -n = 0-n */
-
-    while (courant != NULL){
+    
+    if (courant == NULL) {
+        if (integer_p(resultat)) {
+            return new_integer(-get_integer(resultat));
+        } else { /* ratio_p(resultat) */
+            return new_ratio(-get_numerator(resultat), get_denominator(resultat));
+        }
+    }
+    
+    while (courant != NULL) {
         a = car(courant);
-
-        if (!integer_p(a)) erreur(TYPAGE, "-", "nécessite un entier", a);
-
-        diff = valisp_sub(diff, get_integer(a));
+        
+        if (!integer_p(a) && !ratio_p(a)) {
+            erreur(TYPAGE, "-", "nécessite un nombre (entier ou ratio)", a);
+        }
+        
+        resultat = sub_ratio(resultat, a);
+        
         courant = cdr(courant);
     }
-
-    return new_integer(diff);
+    
+    return resultat;
 }
 
 sexpr produit_valisp(sexpr liste, sexpr env) {
     sexpr a;
     sexpr courant = liste;
-    valisp_integer_t produit = 1;
-
+    sexpr resultat = NULL;
+    
     if (liste == NULL) return new_integer(1);
-
-    while (courant != NULL){
+    
+    a = car(courant);
+    if (!integer_p(a) && !ratio_p(a)) {
+        erreur(TYPAGE, "*", "nécessite un nombre (entier ou ratio)", a);
+    }
+    resultat = a;
+    courant = cdr(courant);
+    
+    while (courant != NULL) {
         a = car(courant);
-
-        if (!integer_p(a)) erreur(TYPAGE, "*", "nécessite un entier", a);
-
-        produit = valisp_mul(produit, get_integer(a));
+        
+        if (!integer_p(a) && !ratio_p(a)) {
+            erreur(TYPAGE, "*", "nécessite un nombre (entier ou ratio)", a);
+        }
+        
+        resultat = mul_ratio(resultat, a);
+        
         courant = cdr(courant);
     }
-
-    return new_integer(produit);
+    
+    return resultat;
 }
 
 sexpr div_valisp(sexpr liste, sexpr env) {
     sexpr a;
     sexpr courant = liste;
-    valisp_integer_t quotient;
-    valisp_integer_t diviseur;
-
+    sexpr resultat = NULL;
+    
+    if (liste == NULL) {
+        erreur(ARITE, "/", "nécessite au moins un argument", NULL);
+    }
+    
     a = car(courant);
-
-    if (!integer_p(a)) erreur(TYPAGE, "/", "nécessite un entier", a);
-
-    quotient = get_integer(a);
+    if (!integer_p(a) && !ratio_p(a)) {
+        erreur(TYPAGE, "/", "nécessite un nombre (entier ou ratio)", a);
+    }
+    resultat = a;
     courant = cdr(courant);
     
     if (courant == NULL) {
-        /* 1/n */
-        if (quotient == 0) {
-            erreur(DIVISION_PAR_ZERO, "/", "Division par zéro", NULL);
+        if (integer_p(resultat)) {
+            if (get_integer(resultat) == 0) {
+                erreur(DIVISION_PAR_ZERO, "/", "Division par zéro", NULL);
+            }
+            return new_ratio(1, get_integer(resultat));
+        } else {
+            if (get_numerator(resultat) == 0) {
+                erreur(DIVISION_PAR_ZERO, "/", "Division par zéro", NULL);
+            }
+            return new_ratio(get_denominator(resultat), get_numerator(resultat));
         }
-        return new_integer(valisp_div(1, quotient));
     }
-
-    while (courant != NULL){
+    
+    while (courant != NULL) {
         a = car(courant);
-
-        if (!integer_p(a)) erreur(TYPAGE, "/", "nécessite un entier", a);
         
-        diviseur = get_integer(a);
-        if (diviseur == 0) {
+        if (!integer_p(a) && !ratio_p(a)) {
+            erreur(TYPAGE, "/", "nécessite un nombre (entier ou ratio)", a);
+        }
+        
+        if ((integer_p(a) && get_integer(a) == 0) || 
+            (ratio_p(a) && get_numerator(a) == 0)) {
             erreur(DIVISION_PAR_ZERO, "/", "Division par zéro", NULL);
         }
         
-        quotient = valisp_div(quotient, diviseur);
+        resultat = div_ratio(resultat, a);
+        
         courant = cdr(courant);
     }
-
-    return new_integer(quotient);
+    
+    return resultat;
 }
 
 sexpr mod_valisp(sexpr liste, sexpr env) {
@@ -191,10 +234,23 @@ sexpr less_than_valisp(sexpr liste, sexpr env) {
     a = car(liste);
     b = car(cdr(liste));
     
-    if (!integer_p(a)) erreur(TYPAGE, "<", "nécessite un entier", a);
-    if (!integer_p(b)) erreur(TYPAGE, "<", "nécessite un entier", b);
-
-    if (valisp_lt(get_integer(a), get_integer(b))) {
+    if (!integer_p(a) && !ratio_p(a)) {
+        erreur(TYPAGE, "<", "nécessite un nombre (entier ou ratio)", a);
+    }
+    
+    if (!integer_p(b) && !ratio_p(b)) {
+        erreur(TYPAGE, "<", "nécessite un nombre (entier ou ratio)", b);
+    }
+    
+    if (integer_p(a) && integer_p(b)) {
+        if (valisp_lt(get_integer(a), get_integer(b))) {
+            return new_symbol("t");
+        } else {
+            return NULL;
+        }
+    }
+    
+    if (less_than_ratio(a, b)) {
         return new_symbol("t");
     } else {
         return NULL;
@@ -210,10 +266,23 @@ sexpr sup_than_valisp(sexpr liste, sexpr env) {
     a = car(liste);
     b = car(cdr(liste));
     
-    if (!integer_p(a)) erreur(TYPAGE, ">", "nécessite un entier", a);
-    if (!integer_p(b)) erreur(TYPAGE, ">", "nécessite un entier", b);
-
-    if (valisp_gt(get_integer(a), get_integer(b))) {
+    if (!integer_p(a) && !ratio_p(a)) {
+        erreur(TYPAGE, ">", "nécessite un nombre (entier ou ratio)", a);
+    }
+    
+    if (!integer_p(b) && !ratio_p(b)) {
+        erreur(TYPAGE, ">", "nécessite un nombre (entier ou ratio)", b);
+    }
+    
+    if (integer_p(a) && integer_p(b)) {
+        if (valisp_gt(get_integer(a), get_integer(b))) {
+            return new_symbol("t");
+        } else {
+            return NULL;
+        }
+    }
+    
+    if (less_than_ratio(b, a)) {
         return new_symbol("t");
     } else {
         return NULL;
@@ -229,10 +298,23 @@ sexpr equal_valisp(sexpr liste, sexpr env) {
     a = car(liste);
     b = car(cdr(liste));
     
-    if (!integer_p(a)) erreur(TYPAGE, "=", "nécessite un entier", a);
-    if (!integer_p(b)) erreur(TYPAGE, "=", "nécessite un entier", b);
-
-    if (valisp_eq(get_integer(a), get_integer(b))) {
+    if (!integer_p(a) && !ratio_p(a)) {
+        erreur(TYPAGE, "=", "nécessite un nombre (entier ou ratio)", a);
+    }
+    
+    if (!integer_p(b) && !ratio_p(b)) {
+        erreur(TYPAGE, "=", "nécessite un nombre (entier ou ratio)", b);
+    }
+    
+    if (integer_p(a) && integer_p(b)) {
+        if (valisp_eq(get_integer(a), get_integer(b))) {
+            return new_symbol("t");
+        } else {
+            return NULL;
+        }
+    }
+    
+    if (equal_ratio(a, b)) {
         return new_symbol("t");
     } else {
         return NULL;
@@ -292,6 +374,8 @@ sexpr type_of_valisp(sexpr liste, sexpr env) {
     
     if (integer_p(a)) {
         return new_symbol("entier");
+    } else if (ratio_p(a)) {
+        return new_symbol("ratio");
     } else if (string_p(a)) {
         return new_symbol("chaine");
     } else if (symbol_p(a)) {
