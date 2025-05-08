@@ -320,18 +320,7 @@ void test_div() {
     b = RUN_TEST(integer_p(resultat)) && b;
     b = RUN_TEST(get_integer(resultat) == 4) && b;
     ok_test(b);
-    
-    /* Test avec 1 paramètre : devrait retourner 1/paramètre */
-    liste = cons(new_integer(4), NULL);
-    resultat = div_valisp(liste, env);
-    
-    printf("div_valisp 4 = ");
-    afficher(resultat);
-    printf("  ");
-    
-    b = RUN_TEST(integer_p(resultat)) && b;
-    b = RUN_TEST(get_integer(resultat) == 1/4) && b; 
-    ok_test(b);
+
     printf("\n");
 }
 #endif

@@ -1,10 +1,3 @@
-/**
-* Configuration des tests Valisp
-* 
-* Ce fichier permet d'activer/désactiver des groupes de tests
-* en décommentant les définitions correspondantes.
-*/
-
 #ifndef TEST_CONFIG_H
 #define TEST_CONFIG_H
  
@@ -15,6 +8,7 @@
 #define TEST_PARSEUR 
 #define TEST_ENV_INIT
 #define TEST_ENV_MANIP
+#define TEST_PRIM_RATIO     /* Tests pour les ratios */
  
 /* Configuration des tests individuels pour l'allocateur */
 #ifdef TEST_ALLOCATEUR

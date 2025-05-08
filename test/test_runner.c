@@ -85,6 +85,11 @@ int main() {
     #endif
     #endif
 
+    /* Tests des primitives ratio */
+    #ifdef TEST_PRIM_RATIO
+    test_prim_ratio();
+    #endif
+
     /* Tests de l'environnement */
     #ifdef TEST_ENV_INIT
     test_initialiser_environnement();
