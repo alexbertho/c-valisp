@@ -26,8 +26,13 @@ valisp/
 │   ├── utils/               # Tests pour les utilitaires
 │   └── test_runner.c        # Point d'entrée des tests
 ├── build/                   # Fichiers de compilation générés
+│   ├── source/              # Objets de la compilation standard
+│   ├── debug/               # Objets de la compilation en mode debug
+│   └── test/                # Objets de la compilation des tests
 ├── bin/                     # Exécutables générés
-│   └── valisp               # Exécutable principal
+│   ├── valisp               # Exécutable principal
+│   ├── valisp_debug         # Exécutable avec symboles de débogage
+│   └── test_valisp          # Exécutable des tests
 ├── Makefile                 # Configuration de compilation
 └── README.md                # Ce fichier
 ```
@@ -71,6 +76,14 @@ make
 
 Cela générera l'exécutable `bin/valisp`.
 
+Pour compiler une version de débogage avec des symboles supplémentaires:
+
+```bash
+make debug
+```
+
+Cela générera l'exécutable `bin/valisp_debug` avec des informations de débogage complètes.
+
 Pour exécuter les tests:
 
 ```bash
@@ -91,6 +104,12 @@ Une fois compilé, vous pouvez exécuter le programme avec:
 
 ```bash
 ./bin/valisp [OPTIONS]
+```
+
+Pour la version de débogage:
+
+```bash
+./bin/valisp_debug [OPTIONS]
 ```
 
 ### Options disponibles
