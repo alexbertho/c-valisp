@@ -1,6 +1,6 @@
 # Valisp - Un interpréteur Lisp simplifié
 
-Ce projet est une implémentation d'un interpréteur Lisp simplifié appelé Valisp, écrit en C. Il comprend un allocateur de mémoire personnalisé, un système de types, et des primitives du langage.
+Ce projet est une implémentation d'un interpréteur Lisp simplifié appelé Valisp, écrit en C89 (ANSI). Il comprend un allocateur de mémoire personnalisé, un système de types, et des primitives du langage.
 
 Ce projet est réalisé dans le cadre de l'UE "Programmation impérative en C" enseigné par M. Balledon, professeur de cette UE à l'Université Côte d'Azur.
 
