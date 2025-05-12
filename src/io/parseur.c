@@ -283,9 +283,18 @@ int parseur(char *texte, int i, sexpr *res) {
 int valisp_read(char *texte, sexpr *res) {
     int i;
     *res = NULL;
+
+    i = nettoyer_espaces(texte, 0);
+    
+    if (texte[i] == '\0') {
+        return -1;
+    }
+
     i = parseur(texte, 0, res);
     i = nettoyer_espaces(texte,i);
+
     if (i>0 && texte[i] == '\0') return 0;
+
     return i;
 }
 

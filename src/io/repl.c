@@ -88,7 +88,12 @@ int repl() {
             invite = invite_defaut;
             POSITION=0;
 
-            if (res < 0) {
+            /* Rien à parser */
+            if (res == -1) {
+                continue;
+            }
+
+            if (res < -1) {
                 printf("%s", couleur_rouge);
                 printf("Erreur de syntaxe [%d]\n\n", res);
                 printf("%s", couleur_defaut);

@@ -105,7 +105,7 @@ int valisp_main(int argc, char *argv[]) {
     int option_index = 0;
     bool load_stdlib = 1;
 
-    while ((c = getopt_long(argc, argv, "ls:hn", long_options, &option_index)) != -1) {
+    while ((c = getopt_long(argc, argv, "l:s:hn", long_options, &option_index)) != -1) {
         switch (c) {
         case 'h':
             printf(aide, argv[0]);
@@ -113,17 +113,21 @@ int valisp_main(int argc, char *argv[]) {
         case 'n':
             load_stdlib = 0;
             break;
-        case 'l':
+        case 'l': {
+            FILE *loaded_file = NULL;
             init_valisp(load_stdlib, 1);
             printf("Chargement du fichier %s", optarg);      
-            if (lire_fichier(optarg) != 0) {
-                printf("%s [KO]\n%s", couleur_rouge, couleur_defaut);
-            } else {
+            if (ouvrir_fichier(optarg, &loaded_file) == 0) {
                 printf("%s [OK]\n%s", couleur_vert, couleur_defaut);
+                interpreter_fichier(loaded_file);
+                fclose(loaded_file);
+            } else {
+                printf("%s [KO]\n%s", couleur_rouge, couleur_defaut);
             }
             c = repl();
             printf("À bientôt\n");
-            return c;
+            return c; 
+        }
         case 's':
             init_valisp(0, 0);
             if (lire_fichier(optarg) != 0) {
