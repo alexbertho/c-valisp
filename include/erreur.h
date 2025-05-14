@@ -21,5 +21,6 @@ void erreur_fatale(char *fichier, int ligne, char *causes);
 void erreur(enum erreurs type, char *fonction, char *explication, sexpr s);
 jmp_buf *jump_buffer();
 void afficher_erreur();
+extern int USE_LONGJMP;
 
 #endif

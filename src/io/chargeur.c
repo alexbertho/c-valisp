@@ -9,6 +9,7 @@
 #include "couleurs.h"
 #include "primitives.h"
 #include "valisp.h"
+#include "erreur.h"
 
 #define TAILLE_BUFFER 10000
 
@@ -45,6 +46,9 @@ int interpreter_fichier(FILE* fichier) {
     char BUFFER_READ[TAILLE_BUFFER];
     int POSITION = 0;
 
+    int old_use_longjmp = USE_LONGJMP;
+    USE_LONGJMP = 0;
+
     if (fichier == NULL) {
         return 1;
     }
@@ -77,6 +81,8 @@ int interpreter_fichier(FILE* fichier) {
         printf("%s", couleur_defaut);
     }
 
+    USE_LONGJMP = old_use_longjmp;
+    
     return 0;
 }
 

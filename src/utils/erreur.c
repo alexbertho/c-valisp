@@ -21,6 +21,8 @@ char *FONCTION_ERREUR;
 sexpr SEXPR_ERREUR;
 jmp_buf buf;
 
+int USE_LONGJMP = 1;
+
 jmp_buf *jump_buffer() {
     return &buf;
 }
@@ -55,7 +57,10 @@ void erreur(enum erreurs type, char* fonction, char * explication, sexpr s) {
     FONCTION_ERREUR = fonction;
     SEXPR_ERREUR = s;
 
-    longjmp(buf, 1);
+
+    if (USE_LONGJMP) {
+        longjmp(buf, 1);
+    }
 }
 
 void erreur_fatale(char  *fichier, int ligne, char* causes) {
