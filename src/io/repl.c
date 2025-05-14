@@ -16,8 +16,6 @@
 #include "erreur.h"
 #include "couleurs.h"
 
-#define TAILLE_BUFFER 10000
-
 void afficher_banniere() {
     printf("VAΛISP V.0.0.1\n\n");
 
@@ -47,12 +45,15 @@ int repl() {
     char *invite_defaut = "\001\033[1;33m\002va\033[1;32mλ\033[1;33misp>\001\033[1;0m\002 ";
     char *invite = invite_defaut;
     char *ligne;
-    char BUFFER_READ[TAILLE_BUFFER];
-    int POSITION = 0;
-    sexpr val;
+
     int res;
-    jmp_buf *buf = jump_buffer();
+    
+    sexpr val;
     sexpr envg = environnement_global();
+    
+    jmp_buf *buf = jump_buffer();
+
+    reinitialiser_buffer_parseur();
 
     using_history();
 
@@ -71,11 +72,10 @@ int repl() {
 
         if (!setjmp(*buf)) {
 
-            POSITION = ajout_buffer(BUFFER_READ, POSITION, ligne);
-
+            ajouter_ligne_buffer_parseur(ligne);
             free(ligne);
 
-            res = valisp_read(BUFFER_READ, &val);		  /* READ */
+            res = parser_et_evaluer_buffer(&val);
 
             /* L’expression n’est pas finie, on refait un tour pour la finir */
             if (res == -2)  {
@@ -83,10 +83,10 @@ int repl() {
                 continue;
             }
 
-            supprime_retour_ligne_finale_buffer(BUFFER_READ);
-            add_history(BUFFER_READ);
+            add_history(obtenir_buffer_parseur());
             invite = invite_defaut;
-            POSITION=0;
+            
+            reinitialiser_buffer_parseur();
 
             /* Rien à parser */
             if (res == -1) {

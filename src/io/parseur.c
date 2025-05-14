@@ -5,6 +5,11 @@
 #include "types.h"
 #include "memoire.h"
 
+#define TAILLE_BUFFER 10000
+
+static char BUFFER_PARSEUR[TAILLE_BUFFER];
+static int POSITION_PARSEUR = 0;
+
 int est_espace(char c) {
     return (c == ' ' || c == '\t' || c == '\n') || 
            (c == '\r' || c == '\f' || c == '\v');
@@ -298,6 +303,11 @@ int valisp_read(char *texte, sexpr *res) {
     return i;
 }
 
+void reinitialiser_buffer_parseur() {
+    POSITION_PARSEUR = 0;
+    BUFFER_PARSEUR[0] = '\0';
+}
+
 int ajout_buffer(char *buffer, int position, char *chaine) {
     int i;
     for (i=0; chaine[i] != '\0'; i++) {
@@ -312,4 +322,27 @@ void supprime_retour_ligne_finale_buffer(char *buffer) {
     int i;
     for (i=0; buffer[i] != '\0'; i++);
     if (buffer[i-1] == '\n') buffer[i-1] = '\0';
+}
+
+int ajouter_ligne_buffer_parseur(char *ligne) {
+    POSITION_PARSEUR = ajout_buffer(BUFFER_PARSEUR, POSITION_PARSEUR, ligne);
+    return POSITION_PARSEUR;
+}
+
+int parser_et_evaluer_buffer(sexpr *resultat) {
+    int res;
+    
+    res = valisp_read(BUFFER_PARSEUR, resultat);
+    
+    if (res == -2) {
+        return -2;
+    }
+    
+    supprime_retour_ligne_finale_buffer(BUFFER_PARSEUR);
+    
+    return res;
+}
+
+char* obtenir_buffer_parseur() {
+    return BUFFER_PARSEUR;
 }
